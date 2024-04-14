@@ -7,7 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5831F96F2BC1E3E200FCCBC2 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5831F96E2BC1E3E200FCCBC2 /* main.swift */; };
+		5831F96F2BC1E3E200FCCBC2 /* RiscVEmulator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5831F96E2BC1E3E200FCCBC2 /* RiscVEmulator.swift */; };
+		5831F9772BC1E41300FCCBC2 /* ArgumentParser in Frameworks */ = {isa = PBXBuildFile; productRef = 5831F9762BC1E41300FCCBC2 /* ArgumentParser */; };
+		5831F9792BC1E41300FCCBC2 /* generate-manual in Frameworks */ = {isa = PBXBuildFile; productRef = 5831F9782BC1E41300FCCBC2 /* generate-manual */; };
+		5831F97E2BC1E81400FCCBC2 /* CPU.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5831F97D2BC1E81400FCCBC2 /* CPU.swift */; };
+		5831F9802BC1E8A300FCCBC2 /* Ram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5831F97F2BC1E8A300FCCBC2 /* Ram.swift */; };
+		5831F9822BC1E8B600FCCBC2 /* Memory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5831F9812BC1E8B600FCCBC2 /* Memory.swift */; };
+		5831F9852BC2013600FCCBC2 /* RiscVInstruction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5831F9842BC2013600FCCBC2 /* RiscVInstruction.swift */; };
+		5831F9882BC2023B00FCCBC2 /* IType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5831F9872BC2023B00FCCBC2 /* IType.swift */; };
+		5831F98A2BC20AE800FCCBC2 /* RType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5831F9892BC20AE800FCCBC2 /* RType.swift */; };
+		5831F98C2BC20CEE00FCCBC2 /* common.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5831F98B2BC20CEE00FCCBC2 /* common.swift */; };
+		5831F9912BC3475400FCCBC2 /* UType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5831F9902BC3475300FCCBC2 /* UType.swift */; };
+		5831F9952BC3651D00FCCBC2 /* JType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5831F9942BC3651D00FCCBC2 /* JType.swift */; };
+		5831F9992BC3889300FCCBC2 /* BType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5831F9982BC3889300FCCBC2 /* BType.swift */; };
+		5831F99C2BC4DC7800FCCBC2 /* SignExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5831F99B2BC4DC7800FCCBC2 /* SignExtension.swift */; };
+		5831F99E2BC9AB0400FCCBC2 /* SType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5831F99D2BC9AB0400FCCBC2 /* SType.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,7 +38,24 @@
 
 /* Begin PBXFileReference section */
 		5831F96B2BC1E3E200FCCBC2 /* riscv */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = riscv; sourceTree = BUILT_PRODUCTS_DIR; };
-		5831F96E2BC1E3E200FCCBC2 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		5831F96E2BC1E3E200FCCBC2 /* RiscVEmulator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RiscVEmulator.swift; sourceTree = "<group>"; };
+		5831F97D2BC1E81400FCCBC2 /* CPU.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPU.swift; sourceTree = "<group>"; };
+		5831F97F2BC1E8A300FCCBC2 /* Ram.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ram.swift; sourceTree = "<group>"; };
+		5831F9812BC1E8B600FCCBC2 /* Memory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Memory.swift; sourceTree = "<group>"; };
+		5831F9832BC1FEDE00FCCBC2 /* test.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = test.bin; sourceTree = "<group>"; };
+		5831F9842BC2013600FCCBC2 /* RiscVInstruction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RiscVInstruction.swift; sourceTree = "<group>"; };
+		5831F9872BC2023B00FCCBC2 /* IType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IType.swift; sourceTree = "<group>"; };
+		5831F9892BC20AE800FCCBC2 /* RType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RType.swift; sourceTree = "<group>"; };
+		5831F98B2BC20CEE00FCCBC2 /* common.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = common.swift; sourceTree = "<group>"; };
+		5831F98D2BC2F61100FCCBC2 /* test.s */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm; path = test.s; sourceTree = "<group>"; };
+		5831F9902BC3475300FCCBC2 /* UType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UType.swift; sourceTree = "<group>"; };
+		5831F9942BC3651D00FCCBC2 /* JType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JType.swift; sourceTree = "<group>"; };
+		5831F9962BC3781700FCCBC2 /* beq.s */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm; path = beq.s; sourceTree = "<group>"; };
+		5831F9982BC3889300FCCBC2 /* BType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BType.swift; sourceTree = "<group>"; };
+		5831F99A2BC4D83D00FCCBC2 /* memory.s */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm; path = memory.s; sourceTree = "<group>"; };
+		5831F99B2BC4DC7800FCCBC2 /* SignExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignExtension.swift; sourceTree = "<group>"; };
+		5831F99D2BC9AB0400FCCBC2 /* SType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SType.swift; sourceTree = "<group>"; };
+		5831F99F2BCB1B0A00FCCBC2 /* rv64i.s */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm; path = rv64i.s; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,6 +63,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5831F9772BC1E41300FCCBC2 /* ArgumentParser in Frameworks */,
+				5831F9792BC1E41300FCCBC2 /* generate-manual in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -41,6 +74,7 @@
 		5831F9622BC1E3E200FCCBC2 = {
 			isa = PBXGroup;
 			children = (
+				5831F97B2BC1E7B900FCCBC2 /* debug */,
 				5831F96D2BC1E3E200FCCBC2 /* riscv */,
 				5831F96C2BC1E3E200FCCBC2 /* Products */,
 			);
@@ -57,9 +91,41 @@
 		5831F96D2BC1E3E200FCCBC2 /* riscv */ = {
 			isa = PBXGroup;
 			children = (
-				5831F96E2BC1E3E200FCCBC2 /* main.swift */,
+				5831F9862BC2022F00FCCBC2 /* instruction decoding types */,
+				5831F96E2BC1E3E200FCCBC2 /* RiscVEmulator.swift */,
+				5831F97D2BC1E81400FCCBC2 /* CPU.swift */,
+				5831F99B2BC4DC7800FCCBC2 /* SignExtension.swift */,
+				5831F9842BC2013600FCCBC2 /* RiscVInstruction.swift */,
+				5831F9812BC1E8B600FCCBC2 /* Memory.swift */,
+				5831F97F2BC1E8A300FCCBC2 /* Ram.swift */,
 			);
 			path = riscv;
+			sourceTree = "<group>";
+		};
+		5831F97B2BC1E7B900FCCBC2 /* debug */ = {
+			isa = PBXGroup;
+			children = (
+				5831F9832BC1FEDE00FCCBC2 /* test.bin */,
+				5831F98D2BC2F61100FCCBC2 /* test.s */,
+				5831F9962BC3781700FCCBC2 /* beq.s */,
+				5831F99F2BCB1B0A00FCCBC2 /* rv64i.s */,
+				5831F99A2BC4D83D00FCCBC2 /* memory.s */,
+			);
+			path = debug;
+			sourceTree = "<group>";
+		};
+		5831F9862BC2022F00FCCBC2 /* instruction decoding types */ = {
+			isa = PBXGroup;
+			children = (
+				5831F9872BC2023B00FCCBC2 /* IType.swift */,
+				5831F99D2BC9AB0400FCCBC2 /* SType.swift */,
+				5831F98B2BC20CEE00FCCBC2 /* common.swift */,
+				5831F9892BC20AE800FCCBC2 /* RType.swift */,
+				5831F9902BC3475300FCCBC2 /* UType.swift */,
+				5831F9942BC3651D00FCCBC2 /* JType.swift */,
+				5831F9982BC3889300FCCBC2 /* BType.swift */,
+			);
+			path = "instruction decoding types";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -72,12 +138,17 @@
 				5831F9672BC1E3E200FCCBC2 /* Sources */,
 				5831F9682BC1E3E200FCCBC2 /* Frameworks */,
 				5831F9692BC1E3E200FCCBC2 /* CopyFiles */,
+				5831F98F2BC32F9200FCCBC2 /* ShellScript */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = riscv;
+			packageProductDependencies = (
+				5831F9762BC1E41300FCCBC2 /* ArgumentParser */,
+				5831F9782BC1E41300FCCBC2 /* generate-manual */,
+			);
 			productName = riscv;
 			productReference = 5831F96B2BC1E3E200FCCBC2 /* riscv */;
 			productType = "com.apple.product-type.tool";
@@ -106,6 +177,9 @@
 				Base,
 			);
 			mainGroup = 5831F9622BC1E3E200FCCBC2;
+			packageReferences = (
+				5831F9752BC1E41300FCCBC2 /* XCRemoteSwiftPackageReference "swift-argument-parser" */,
+			);
 			productRefGroup = 5831F96C2BC1E3E200FCCBC2 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -115,12 +189,54 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		5831F98F2BC32F9200FCCBC2 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/debug/test.s",
+				"$(SRCROOT)/debug/beq.s",
+				"$(SRCROOT)/debug/memory.s",
+				"$(SRCROOT)/debug/rv64i.s",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(SRCROOT)/debug/test.bin",
+				"$(SRCROOT)/debug/a.out",
+				"$(SRCROOT)/debug/beq.bin",
+				"$(SRCROOT)/debug/b.out",
+				"$(SRCROOT)/debug/memory.bin",
+				"$(SRCROOT)/debug/rv64i.bin",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/zsh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\ncd debug\n/Users/zk/xcbuild/riscv/bin/riscv64-unknown-elf-gcc -Wl,-Ttext=0x0 -nostdlib -o a.out test.s\n/Users/zk/xcbuild/riscv/bin/riscv64-unknown-elf-objcopy -O binary a.out test.bin\n\n/Users/zk/xcbuild/riscv/bin/riscv64-unknown-elf-gcc -Wl,-Ttext=0x0 -nostdlib -o b.out beq.s\n/Users/zk/xcbuild/riscv/bin/riscv64-unknown-elf-objcopy -O binary b.out beq.bin\n\n/Users/zk/xcbuild/riscv/bin/riscv64-unknown-elf-gcc -Wl,-Ttext=0x0 -nostdlib -o b.out memory.s\n/Users/zk/xcbuild/riscv/bin/riscv64-unknown-elf-objcopy -O binary b.out memory.bin\n\n/Users/zk/xcbuild/riscv/bin/riscv64-unknown-elf-gcc -Wl,-Ttext=0x0 -nostdlib -o b.out rv64i.s\n/Users/zk/xcbuild/riscv/bin/riscv64-unknown-elf-objcopy -O binary b.out rv64i.bin\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		5831F9672BC1E3E200FCCBC2 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5831F96F2BC1E3E200FCCBC2 /* main.swift in Sources */,
+				5831F9912BC3475400FCCBC2 /* UType.swift in Sources */,
+				5831F98C2BC20CEE00FCCBC2 /* common.swift in Sources */,
+				5831F9822BC1E8B600FCCBC2 /* Memory.swift in Sources */,
+				5831F9992BC3889300FCCBC2 /* BType.swift in Sources */,
+				5831F97E2BC1E81400FCCBC2 /* CPU.swift in Sources */,
+				5831F9852BC2013600FCCBC2 /* RiscVInstruction.swift in Sources */,
+				5831F9882BC2023B00FCCBC2 /* IType.swift in Sources */,
+				5831F9952BC3651D00FCCBC2 /* JType.swift in Sources */,
+				5831F99C2BC4DC7800FCCBC2 /* SignExtension.swift in Sources */,
+				5831F98A2BC20AE800FCCBC2 /* RType.swift in Sources */,
+				5831F96F2BC1E3E200FCCBC2 /* RiscVEmulator.swift in Sources */,
+				5831F99E2BC9AB0400FCCBC2 /* SType.swift in Sources */,
+				5831F9802BC1E8A300FCCBC2 /* Ram.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -285,6 +401,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		5831F9752BC1E41300FCCBC2 /* XCRemoteSwiftPackageReference "swift-argument-parser" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-argument-parser.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.3.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		5831F9762BC1E41300FCCBC2 /* ArgumentParser */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5831F9752BC1E41300FCCBC2 /* XCRemoteSwiftPackageReference "swift-argument-parser" */;
+			productName = ArgumentParser;
+		};
+		5831F9782BC1E41300FCCBC2 /* generate-manual */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5831F9752BC1E41300FCCBC2 /* XCRemoteSwiftPackageReference "swift-argument-parser" */;
+			productName = "generate-manual";
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 5831F9632BC1E3E200FCCBC2 /* Project object */;
 }
