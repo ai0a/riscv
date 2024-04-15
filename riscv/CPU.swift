@@ -215,6 +215,18 @@ struct CPU {
         case .ebreak:
             //TODO
             break
+        case .csrrw(destinationRegister: let destinationRegister, sourceRegister: let sourceRegister, csr: let csr):
+            print("TODO: csrrw", instruction)
+        case .csrrs(destinationRegister: let destinationRegister, sourceRegister: let sourceRegister, csr: let csr):
+            print("TODO: csrrs", instruction)
+        case .csrrc(destinationRegister: let destinationRegister, sourceRegister: let sourceRegister, csr: let csr):
+            print("TODO: csrrc", instruction)
+        case .csrrwi(destinationRegister: let destinationRegister, immediate: let immediate, csr: let csr):
+            print("TODO: csrrwi", instruction)
+        case .csrrsi(destinationRegister: let destinationRegister, immediate: let immediate, csr: let csr):
+            print("TODO: csrrsi", instruction)
+        case .csrrci(destinationRegister: let destinationRegister, immediate: let immediate, csr: let csr):
+            print("TODO: csrrci", instruction)
         }
         print(instruction)
     }

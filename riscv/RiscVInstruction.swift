@@ -147,18 +147,48 @@ enum RiscVInstruction {
                 return nil
             }
             self = .fence
-        case 0x69:
-            let decoded = IType(encodedInstruction: encodedInstruction)
-            guard decoded.funct3 == 0 else {
-                return nil
+        case 0x73:
+            let funct3 = RiscVDecoding.funct3(from: encodedInstruction)
+            guard funct3 != 0 else {
+                let decoded = IType(encodedInstruction: encodedInstruction)
+                switch (decoded.immediate) {
+                case 0:
+                    self = .ecall
+                case 1:
+                    self = .ebreak
+                default:
+                    return nil
+                }
+                return
             }
-            switch (decoded.immediate) {
+            switch funct3 >> 2 {
             case 0:
-                self = .ecall
+                let decoded = CSRType(encodedInstruction: encodedInstruction)
+                switch funct3 {
+                case 1:
+                    self = .csrrw(destinationRegister: decoded.destinationRegister, sourceRegister: decoded.sourceRegister, csr: decoded.csr)
+                case 2:
+                    self = .csrrs(destinationRegister: decoded.destinationRegister, sourceRegister: decoded.sourceRegister, csr: decoded.csr)
+                case 3:
+                    self = .csrrc(destinationRegister: decoded.destinationRegister, sourceRegister: decoded.sourceRegister, csr: decoded.csr)
+                default:
+                    return nil
+                }
             case 1:
-                self = .ebreak
+                let decoded = CSRIType(encodedInstruction: encodedInstruction)
+                switch funct3 {
+                case 5:
+                    self = .csrrwi(destinationRegister: decoded.destinationRegister, immediate: decoded.immediate, csr: decoded.csr)
+                case 6:
+                    self = .csrrsi(destinationRegister: decoded.destinationRegister, immediate: decoded.immediate, csr: decoded.csr)
+                case 7:
+                    self = .csrrci(destinationRegister: decoded.destinationRegister, immediate: decoded.immediate, csr: decoded.csr)
+                default:
+                    return nil
+                }
             default:
-                return nil
+                // This should NEVER happen (should not be possible), so if it does, throw a huge fit
+                fatalError("Somehow got a more than three-bit funct3")
             }
         case 0x3:
             let decoded = IType(encodedInstruction: encodedInstruction)
@@ -254,6 +284,7 @@ enum RiscVInstruction {
             return nil
         }
     }
+    //rv64i
     case lb(destinationRegister: UInt8, sourceRegister: UInt8, immediate: Int)
     case lbu(destinationRegister: UInt8, sourceRegister: UInt8, immediate: Int)
     case lh(destinationRegister: UInt8, sourceRegister: UInt8, immediate: Int)
@@ -306,4 +337,11 @@ enum RiscVInstruction {
     case xor(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
     case or(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
     case and(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
+    //zicsr
+    case csrrw(destinationRegister: UInt8, sourceRegister: UInt8, csr: Int)
+    case csrrs(destinationRegister: UInt8, sourceRegister: UInt8, csr: Int)
+    case csrrc(destinationRegister: UInt8, sourceRegister: UInt8, csr: Int)
+    case csrrwi(destinationRegister: UInt8, immediate: Int, csr: Int)
+    case csrrsi(destinationRegister: UInt8, immediate: Int, csr: Int)
+    case csrrci(destinationRegister: UInt8, immediate: Int, csr: Int)
 }
