@@ -27,7 +27,8 @@ enum RiscVInstruction {
             case 7:
                 self = .andi(destinationRegister: decoded.destinationRegister, sourceRegister: decoded.sourceRegister, immediate: decoded.immediate)
             case 1:
-                guard RiscVDecoding.funct7(from: encodedInstruction) == 0 else {
+                // `& ((1 << 7) - 2)` because it should only check the highest *6* bits, not 7.
+                guard RiscVDecoding.funct7(from: encodedInstruction) & ((1 << 7) - 2) == 0 else {
                     return nil
                 }
                 self = .slli(destinationRegister: decoded.destinationRegister, sourceRegister: decoded.sourceRegister, shamt: decoded.immediate)
