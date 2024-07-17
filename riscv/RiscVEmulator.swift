@@ -20,11 +20,6 @@ struct RiscVEmulator: ParsableCommand {
         let url = URL(filePath: codeFilePath)
         let fileData = try Data(contentsOf: url)
         
-        guard !isElf else {
-            try runElf(data: fileData)
-            return
-        }
-        
         // 8mb ish
         var ram = Ram(data: Data(count: 0x8000000))
         ram.data.replaceSubrange(ram.data.startIndex...fileData.count, with: fileData)
@@ -38,9 +33,5 @@ struct RiscVEmulator: ParsableCommand {
             }
         }
         cpu.printRegisters()
-    }
-    
-    func runElf(data: Data) throws {
-        
     }
 }
