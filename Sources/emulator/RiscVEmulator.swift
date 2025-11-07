@@ -15,6 +15,9 @@ struct RiscVEmulator: ParsableCommand {
     
     @Flag
     var isElf: Bool = false
+
+    @Flag(name: .customLong("riscv-test"))
+    var isRunningTestFromRiscvTests: Bool = false
     
     func run() throws {
         let url = URL(filePath: codeFilePath)
@@ -29,9 +32,12 @@ struct RiscVEmulator: ParsableCommand {
                 try cpu.executeSingleInstruction()
             } catch {
                 print(error)
-                return cpu.printRegisters()
+                cpu.printRegisters()
+                throw error
             }
         }
-        cpu.printRegisters()
+        if !isRunningTestFromRiscvTests {
+            cpu.printRegisters()
+        }
     }
 }
