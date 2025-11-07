@@ -216,17 +216,17 @@ struct CPU {
             //TODO
             break
         case .csrrw(destinationRegister: let destinationRegister, sourceRegister: let sourceRegister, csr: let csr):
-            print("TODO: csrrw", instruction)
+            fatalError("TODO: csrrw \(instruction)")
         case .csrrs(destinationRegister: let destinationRegister, sourceRegister: let sourceRegister, csr: let csr):
-            print("TODO: csrrs", instruction)
+            fatalError("TODO: csrrs \(instruction)")
         case .csrrc(destinationRegister: let destinationRegister, sourceRegister: let sourceRegister, csr: let csr):
-            print("TODO: csrrc", instruction)
+            fatalError("TODO: csrrc \(instruction)")
         case .csrrwi(destinationRegister: let destinationRegister, immediate: let immediate, csr: let csr):
-            print("TODO: csrrwi", instruction)
+            fatalError("TODO: csrrwi \(instruction)")
         case .csrrsi(destinationRegister: let destinationRegister, immediate: let immediate, csr: let csr):
-            print("TODO: csrrsi", instruction)
+            fatalError("TODO: csrrsi \(instruction)")
         case .csrrci(destinationRegister: let destinationRegister, immediate: let immediate, csr: let csr):
-            print("TODO: csrrci", instruction)
+            fatalError("TODO: csrrci \(instruction)")
         }
         print(instruction)
     }
