@@ -64,3 +64,17 @@ bgeuloop:
     j bltuloop
 afterbgeuloop:
     mv x8, x3
+
+# Expects:
+# x0 = 0x0
+# x1 = 0x1
+# x2 = 0x2
+# x3 = 0x1
+# x4 = 0x1
+# x5 = 0x3
+# x6 = 0x3
+# x7 = 0x1
+# x8 = 0x1
+# x9 = 0x0
+# ...
+# x31 = 0x0
