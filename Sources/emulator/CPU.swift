@@ -125,8 +125,8 @@ struct CPU {
         case .addi(let destinationRegister, let sourceRegister, let immediate):
             registers[Int(destinationRegister)] = registers[Int(sourceRegister)] &+ Int64(immediate)
         case .addiw(let destinationRegister, let sourceRegister, let immediate):
-            let bigResult = registers[Int(sourceRegister)] &+ Int64(immediate)
-            registers[Int(destinationRegister)] = Int64(UInt32(bitPattern: Int32(bigResult & ((1 << 32) - 1))).signExtension())
+            let result32 = Int32(bitPattern: UInt32(registers[Int(sourceRegister)] & ((1 << 32) - 1))) &+ Int32(immediate)
+            registers[Int(destinationRegister)] = Int64(result32)
         case .xori(let destinationRegister, let sourceRegister, let immediate):
             registers[Int(destinationRegister)] = registers[Int(sourceRegister)] ^ Int64(immediate)
         case .ori(let destinationRegister, let sourceRegister, let immediate):
