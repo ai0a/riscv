@@ -227,6 +227,9 @@ struct CPU {
             fatalError("TODO: csrrsi \(instruction)")
         case .csrrci(destinationRegister: let destinationRegister, immediate: let immediate, csr: let csr):
             fatalError("TODO: csrrci \(instruction)")
+        case .mret:
+            //TODO: There are MANY more things that should happen here
+            pc = csrs.mepc
         }
         print(instruction)
     }
