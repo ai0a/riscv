@@ -29,13 +29,21 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 NORMAL='\033[0m'
 
+PASS_COUNT=0
+FAIL_COUNT=0
+
 for CASE in .build/riscv-tests/relevant-cases/*
 do
 	riscv64-unknown-elf-objcopy -O binary "${CASE}" .build/riscv-tests/extracted-case.bin # Extract just the relevant object code
     if "${RUNNER}" --riscv-test .build/riscv-tests/extracted-case.bin
     then
         echo -e "${GREEN}$(basename "${CASE}"): PASS${NORMAL}"
+        let PASS_COUNT+=1
     else
         echo -e "${RED}$(basename "${CASE}"): FAIL${NORMAL}"
+        let FAIL_COUNT+=1
     fi
 done
+
+echo -e "${GREEN}PASSED: ${PASS_COUNT}${NORMAL}"
+echo -e "${RED}FAILED: ${FAIL_COUNT}${NORMAL}"
