@@ -195,19 +195,19 @@ struct CPU {
             registers[Int(destinationRegister)] = registers[Int(sourceRegister1)] << (registers[Int(sourceRegister2)] & 0x3f)
         case .sllw(let destinationRegister, let sourceRegister1, let sourceRegister2):
             let firstOperand = Int32(bitPatternFromLowerHalfOf: registers[Int(sourceRegister1)] & ((1 << 32) - 1))
-            let secondOperand = Int32(bitPatternFromLowerHalfOf: registers[Int(sourceRegister2)] & ((1 << 32) - 1)) & 0x3f
+            let secondOperand = Int32(bitPatternFromLowerHalfOf: registers[Int(sourceRegister2)] & ((1 << 32) - 1)) & 0x1f
             registers[Int(destinationRegister)] =  Int64(firstOperand << secondOperand)
         case .srl(let destinationRegister, let sourceRegister1, let sourceRegister2):
             registers[Int(destinationRegister)] = registers[Int(sourceRegister1)] >> (registers[Int(sourceRegister2)] & 0x3f)
         case .srlw(let destinationRegister, let sourceRegister1, let sourceRegister2):
             let firstOperand = Int32(bitPatternFromLowerHalfOf: registers[Int(sourceRegister1)] & ((1 << 32) - 1))
-            let secondOperand = Int32(bitPatternFromLowerHalfOf: registers[Int(sourceRegister2)] & ((1 << 32) - 1)) & 0x3f
+            let secondOperand = Int32(bitPatternFromLowerHalfOf: registers[Int(sourceRegister2)] & ((1 << 32) - 1)) & 0x1f
             registers[Int(destinationRegister)] =  Int64(firstOperand >> secondOperand)
         case .sra(let destinationRegister, let sourceRegister1, let sourceRegister2):
             registers[Int(destinationRegister)] = registers[Int(sourceRegister1)] >> (registers[Int(sourceRegister2)] & 0x3f)
         case .sraw(let destinationRegister, let sourceRegister1, let sourceRegister2):
             let firstOperand = Int32(bitPatternFromLowerHalfOf: registers[Int(sourceRegister1)] & ((1 << 32) - 1))
-            let secondOperand = Int32(bitPatternFromLowerHalfOf: registers[Int(sourceRegister2)] & ((1 << 32) - 1)) & 0x3f
+            let secondOperand = Int32(bitPatternFromLowerHalfOf: registers[Int(sourceRegister2)] & ((1 << 32) - 1)) & 0x1f
             registers[Int(destinationRegister)] =  Int64(firstOperand >> secondOperand)
         case .slt(let destinationRegister, let sourceRegister1, let sourceRegister2):
             let result: Int64 = if registers[Int(sourceRegister1)] < registers[Int(sourceRegister2)] {
