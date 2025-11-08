@@ -240,6 +240,18 @@ struct CPU {
             registers[Int(destinationRegister)] = Int64((firstOperand &* secondOperand) >> 64)
         case let .mulhu(destinationRegister, sourceRegister1, sourceRegister2):
             registers[Int(destinationRegister)] = Int64(bitPattern: UInt64(bitPattern: registers[Int(sourceRegister1)]).multipliedFullWidth(by: UInt64(bitPattern: registers[Int(sourceRegister2)])).high)
+        case let .div(destinationRegister, sourceRegister1, sourceRegister2):
+            let dividend = registers[Int(sourceRegister1)]
+            let divisor = registers[Int(sourceRegister2)]
+            guard divisor != 0 else { // division by 0
+                registers[Int(destinationRegister)] = -1
+                break
+            }
+            guard dividend != Int64.min || divisor != -1 else { // overflow
+                registers[Int(destinationRegister)] = Int64.min
+                break
+            }
+            registers[Int(destinationRegister)] = dividend / divisor
         case .ecall:
             if let ecallHandler {
                 ecallHandler.ecall(cpu: self)
