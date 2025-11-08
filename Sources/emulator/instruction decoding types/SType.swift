@@ -16,7 +16,7 @@ struct SType {
         sourceRegister1 = RiscVDecoding.sourceRegister1(from: encodedInstruction)
         sourceRegister2 = RiscVDecoding.sourceRegister2(from: encodedInstruction)
         funct3 = RiscVDecoding.funct3(from: encodedInstruction)
-        let bits0Thru4 = (encodedInstruction >> 6) & ((1 << 5) - 1)
+        let bits0Thru4 = (encodedInstruction >> 7) & ((1 << 5) - 1)
         let bits5Thru11 = (encodedInstruction >> 25) << 5
         let uImmediate = bits0Thru4 | bits5Thru11
         immediate = Int((uImmediate << 20).signExtension() >> 20)
