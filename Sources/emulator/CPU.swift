@@ -42,44 +42,44 @@ struct CPU {
     mutating func execute(_ instruction: RiscVInstruction) throws {
         switch (instruction) {
         case .lb(let destinationRegister, let sourceRegister, let immediate):
-            let address = UInt64(bitPattern: registers[Int(sourceRegister)]) &+ UInt64(immediate)
+            let address = UInt64(bitPattern: registers[Int(sourceRegister)]) &+ UInt64(bitPattern: Int64(immediate))
             let value = try memory.read8Bits(address: address).signExtension()
             registers[Int(destinationRegister)] = Int64(value)
         case .lbu(let destinationRegister, let sourceRegister, let immediate):
-            let address = UInt64(bitPattern: registers[Int(sourceRegister)]) &+ UInt64(immediate)
+            let address = UInt64(bitPattern: registers[Int(sourceRegister)]) &+ UInt64(bitPattern: Int64(immediate))
             let value = try memory.read8Bits(address: address)
             registers[Int(destinationRegister)] = Int64(value)
         case .lh(let destinationRegister, let sourceRegister, let immediate):
-            let address = UInt64(bitPattern: registers[Int(sourceRegister)]) &+ UInt64(immediate)
+            let address = UInt64(bitPattern: registers[Int(sourceRegister)]) &+ UInt64(bitPattern: Int64(immediate))
             let value = try memory.read16Bits(address: address).signExtension()
             registers[Int(destinationRegister)] = Int64(value)
         case .lhu(let destinationRegister, let sourceRegister, let immediate):
-            let address = UInt64(bitPattern: registers[Int(sourceRegister)]) &+ UInt64(immediate)
+            let address = UInt64(bitPattern: registers[Int(sourceRegister)]) &+ UInt64(bitPattern: Int64(immediate))
             let value = try memory.read16Bits(address: address)
             registers[Int(destinationRegister)] = Int64(value)
         case .lw(let destinationRegister, let sourceRegister, let immediate):
-            let address = UInt64(bitPattern: registers[Int(sourceRegister)]) &+ UInt64(immediate)
+            let address = UInt64(bitPattern: registers[Int(sourceRegister)]) &+ UInt64(bitPattern: Int64(immediate))
             let value = try memory.read32Bits(address: address).signExtension()
             registers[Int(destinationRegister)] = Int64(value)
         case .lwu(let destinationRegister, let sourceRegister, let immediate):
-            let address = UInt64(bitPattern: registers[Int(sourceRegister)]) &+ UInt64(immediate)
+            let address = UInt64(bitPattern: registers[Int(sourceRegister)]) &+ UInt64(bitPattern: Int64(immediate))
             let value = try memory.read32Bits(address: address)
             registers[Int(destinationRegister)] = Int64(value)
         case .ld(let destinationRegister, let sourceRegister, let immediate):
-            let address = UInt64(bitPattern: registers[Int(sourceRegister)]) &+ UInt64(immediate)
+            let address = UInt64(bitPattern: registers[Int(sourceRegister)]) &+ UInt64(bitPattern: Int64(immediate))
             let value = try memory.read64Bits(address: address).signExtension()
             registers[Int(destinationRegister)] = value
         case .sb(let sourceRegister1, let sourceRegister2, let immediate):
-            let address = UInt64(bitPattern: registers[Int(sourceRegister1)]) &+ UInt64(immediate)
+            let address = UInt64(bitPattern: registers[Int(sourceRegister1)]) &+ UInt64(bitPattern: Int64(immediate))
             try memory.store8Bits(UInt8(UInt64(bitPattern: registers[Int(sourceRegister2)] & 0xff)), at: address)
         case .sh(let sourceRegister1, let sourceRegister2, let immediate):
-            let address = UInt64(bitPattern: registers[Int(sourceRegister1)]) &+ UInt64(immediate)
+            let address = UInt64(bitPattern: registers[Int(sourceRegister1)]) &+ UInt64(bitPattern: Int64(immediate))
             try memory.store16Bits(UInt16(UInt64(bitPattern: registers[Int(sourceRegister2)]) & 0xffff), at: address)
         case .sw(let sourceRegister1, let sourceRegister2, let immediate):
-            let address = UInt64(bitPattern: registers[Int(sourceRegister1)]) &+ UInt64(immediate)
+            let address = UInt64(bitPattern: registers[Int(sourceRegister1)]) &+ UInt64(bitPattern: Int64(immediate))
             try memory.store32Bits(UInt32(UInt64(bitPattern:registers[Int(sourceRegister2)] & 0xffffffff)), at: address)
         case .sd(let sourceRegister1, let sourceRegister2, let immediate):
-            let address = UInt64(bitPattern: registers[Int(sourceRegister1)]) &+ UInt64(immediate)
+            let address = UInt64(bitPattern: registers[Int(sourceRegister1)]) &+ UInt64(bitPattern: Int64(immediate))
             try memory.store64Bits(UInt64(bitPattern: registers[Int(sourceRegister2)]), at: address)
         case .fence:
             // I don't think this is relevant.
