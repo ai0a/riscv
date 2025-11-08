@@ -232,6 +232,8 @@ struct CPU {
             registers[Int(destinationRegister)] = registers[Int(sourceRegister1)] & registers[Int(sourceRegister2)]
         case let .mul(destinationRegister, sourceRegister1, sourceRegister2):
             registers[Int(destinationRegister)] = registers[Int(sourceRegister1)] &* registers[Int(sourceRegister2)]
+        case let .mulw(destinationRegister, sourceRegister1, sourceRegister2):
+            registers[Int(destinationRegister)] = Int64(Int32(bitPatternFromLowerHalfOf: registers[Int(sourceRegister1)]) &* Int32(bitPatternFromLowerHalfOf: registers[Int(sourceRegister2)]))
         case let .mulh(destinationRegister, sourceRegister1, sourceRegister2):
             registers[Int(destinationRegister)] = registers[Int(sourceRegister1)].multipliedFullWidth(by: registers[Int(sourceRegister2)]).high
         case let .mulhsu(destinationRegister, sourceRegister1, sourceRegister2):

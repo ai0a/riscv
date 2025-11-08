@@ -285,6 +285,8 @@ enum RiscVInstruction {
                 switch (decoded.funct7) {
                 case 0:
                     self = .addw(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2)
+                case 1:
+                    self = .mulw(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2)
                 case 32:
                     self = .subw(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2)
                 default:
@@ -366,6 +368,7 @@ enum RiscVInstruction {
     case and(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
     // m extension
     case mul(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
+    case mulw(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
     case mulh(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
     case mulhsu(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
     case mulhu(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
