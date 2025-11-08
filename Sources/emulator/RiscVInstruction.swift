@@ -109,6 +109,8 @@ enum RiscVInstruction {
                 switch decoded.funct7 {
                 case 0:
                     self = .or(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2)
+                case 1:
+                    self = .rem(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2)
                 default:
                     return nil
                 }
@@ -367,6 +369,7 @@ enum RiscVInstruction {
     case mulhu(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
     case div(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
     case divu(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
+    case rem(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
     //zicsr
     case csrrw(destinationRegister: UInt8, sourceRegister: UInt8, csr: Int)
     case csrrs(destinationRegister: UInt8, sourceRegister: UInt8, csr: Int)
