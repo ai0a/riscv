@@ -234,6 +234,10 @@ struct CPU {
             registers[Int(destinationRegister)] = registers[Int(sourceRegister1)] &* registers[Int(sourceRegister2)]
         case let .mulh(destinationRegister, sourceRegister1, sourceRegister2):
             registers[Int(destinationRegister)] = registers[Int(sourceRegister1)].multipliedFullWidth(by: registers[Int(sourceRegister2)]).high
+        case let .mulhsu(destinationRegister, sourceRegister1, sourceRegister2):
+            let firstOperand = Int128(registers[Int(sourceRegister1)])
+            let secondOperand = Int128(UInt64(bitPattern: registers[Int(sourceRegister2)]))
+            registers[Int(destinationRegister)] = Int64((firstOperand &* secondOperand) >> 64)
         case .ecall:
             if let ecallHandler {
                 ecallHandler.ecall(cpu: self)
