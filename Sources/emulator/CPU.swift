@@ -248,7 +248,18 @@ struct CPU {
             // The initial value in rs1 is written to the CSR.
             try csrs.set(csr, to: UInt64(bitPattern: registers[Int(sourceRegister)]))
         case .csrrs(destinationRegister: let destinationRegister, sourceRegister: let sourceRegister, csr: let csr):
-            fatalError("TODO: csrrs \(instruction)")
+            // The CSRRS (Atomic Read and Set Bits in CSR) instruction reads the value of the CSR,
+            let csrValue = try csrs.value(of: csr)
+            // zero-extends the value to XLEN bits,
+            // Already done here
+            // and writes it to integer register rd.
+            registers[Int(destinationRegister)] = Int64(bitPattern: csrValue)
+            // The initial value in integer register rs1 is treated as a bit mask that specifies bit positions to be set in the CSR. Any bit that
+            // is high in rs1 will cause the corresponding bit to be set in the CSR, if that CSR bit is writable.
+            // Other bits in the CSR are unaffected (though CSRs might have side effects when written).
+            guard registers[Int(sourceRegister)] == 0 else {
+                fatalError("TODO: CSRRS Setting \(instruction) (rs1 = \(registers[Int(sourceRegister)]))")
+            }
         case .csrrc(destinationRegister: let destinationRegister, sourceRegister: let sourceRegister, csr: let csr):
             fatalError("TODO: csrrc \(instruction)")
         case .csrrwi(destinationRegister: let destinationRegister, immediate: let immediate, csr: let csr):
