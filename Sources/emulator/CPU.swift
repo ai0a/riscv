@@ -173,7 +173,7 @@ struct CPU {
             }
             registers[Int(destinationRegister)] = result
         case .sltiu(let destinationRegister, let sourceRegister, let immediate):
-            let result: Int64 = if registers[Int(sourceRegister)] < immediate {
+            let result: Int64 = if UInt64(bitPattern: registers[Int(sourceRegister)]) < immediate {
                 1
             } else {
                 0
