@@ -26,7 +26,11 @@ struct RiscVEmulator: ParsableCommand {
         // 8mb ish
         var ram = Ram(data: Data(count: 0x8000000))
         ram.data.replaceSubrange(ram.data.startIndex...fileData.count, with: fileData)
-        var cpu = CPU(pc: 0, memory: ram)
+        var cpu = CPU(
+            pc: 0,
+            memory: ram,
+            ecallHandler: isRunningTestFromRiscvTests ? RiscvTestsEcallHandler() : nil
+        )
         for _ in 0..<5000 {
             do {
                 try cpu.executeSingleInstruction()
