@@ -233,7 +233,20 @@ struct CPU {
         // debug mode. Implementations should raise illegal-instruction exceptions on machine-mode access to
         // the latter set of registers.
         case .csrrw(destinationRegister: let destinationRegister, sourceRegister: let sourceRegister, csr: let csr):
-            fatalError("TODO: csrrw \(instruction)")
+            //TODO: This should be atomic, even in multiple-hart environments
+            //The CSRRW (Atomic Read/Write CSR) instruction atomically swaps values in the CSRs and
+            // integer registers.
+            // If rd=x0, then
+            // the instruction shall not read the CSR and shall not cause any of the side effects that might occur
+            // on a CSR read.
+            if destinationRegister != 0 {
+                // CSRRW reads the old value of the CSR, zero-extends the value to XLEN bits,
+                let csrValue = try csrs.value(of: csr)
+                // then writes it to integer register rd.
+                registers[Int(destinationRegister)] = Int64(bitPattern: csrValue)
+            }
+            // The initial value in rs1 is written to the CSR.
+            try csrs.set(csr, to: UInt64(bitPattern: registers[Int(sourceRegister)]))
         case .csrrs(destinationRegister: let destinationRegister, sourceRegister: let sourceRegister, csr: let csr):
             fatalError("TODO: csrrs \(instruction)")
         case .csrrc(destinationRegister: let destinationRegister, sourceRegister: let sourceRegister, csr: let csr):
