@@ -230,6 +230,8 @@ struct CPU {
             registers[Int(destinationRegister)] = registers[Int(sourceRegister1)] | registers[Int(sourceRegister2)]
         case .and(let destinationRegister, let sourceRegister1, let sourceRegister2):
             registers[Int(destinationRegister)] = registers[Int(sourceRegister1)] & registers[Int(sourceRegister2)]
+        case let .mul(destinationRegister, sourceRegister1, sourceRegister2):
+            registers[Int(destinationRegister)] = registers[Int(sourceRegister1)] &* registers[Int(sourceRegister2)]
         case .ecall:
             if let ecallHandler {
                 ecallHandler.ecall(cpu: self)
