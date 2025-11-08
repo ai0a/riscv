@@ -84,6 +84,9 @@ struct CPU {
         case .fence:
             // I don't think this is relevant.
             break
+        case .fencei:
+            // I don't think this is relevant. Nothing needs to be done here in the case of this emulator
+            break
         case .jal(let destinationRegister, let offset):
             registers[Int(destinationRegister)] = Int64(pc)
             pc = UInt64(offset &+ Int(pc))

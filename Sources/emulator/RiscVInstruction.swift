@@ -144,10 +144,18 @@ enum RiscVInstruction {
                 return nil
             }
         case 0xf:
-            guard encodedInstruction & 0xfffff == 0xf else {
+            let decoded = IType(encodedInstruction: encodedInstruction)
+            switch decoded.funct3 {
+            case 0:
+                guard encodedInstruction & 0xfffff == 0xf else {
+                    return nil
+                }
+                self = .fence
+            case 1:
+                self = .fencei
+            default:
                 return nil
             }
-            self = .fence
         case 0x73:
             let funct3 = RiscVDecoding.funct3(from: encodedInstruction)
             guard funct3 != 0 else {
@@ -347,6 +355,8 @@ enum RiscVInstruction {
     case csrrwi(destinationRegister: UInt8, immediate: Int, csr: Int)
     case csrrsi(destinationRegister: UInt8, immediate: Int, csr: Int)
     case csrrci(destinationRegister: UInt8, immediate: Int, csr: Int)
+    // zifenci
+    case fencei
     // Privileged
     case mret
 }
