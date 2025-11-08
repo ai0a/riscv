@@ -16,6 +16,7 @@ popd
 mkdir -p .build/riscv-tests/relevant-cases
 
 cp .build/share/riscv-tests/isa/rv64ui-p-* .build/riscv-tests/relevant-cases/
+cp .build/share/riscv-tests/isa/rv64um-p-* .build/riscv-tests/relevant-cases/
 
 rm .build/riscv-tests/relevant-cases/*.dump
 
