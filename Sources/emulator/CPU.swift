@@ -119,12 +119,12 @@ struct CPU {
                 pc &-= 4
             }
         case .bge(let sourceRegister1, let sourceRegister2, let offset):
-            if (registers[Int(sourceRegister1)] > registers[Int(sourceRegister2)]) {
+            if (registers[Int(sourceRegister1)] >= registers[Int(sourceRegister2)]) {
                 pc = UInt64(offset &+ Int(pc))
                 pc &-= 4
             }
         case .bgeu(let sourceRegister1, let sourceRegister2, let offset):
-            if UInt64(bitPattern: registers[Int(sourceRegister1)]) > UInt64(bitPattern: registers[Int(sourceRegister2)]) {
+            if UInt64(bitPattern: registers[Int(sourceRegister1)]) >= UInt64(bitPattern: registers[Int(sourceRegister2)]) {
                 pc = UInt64(offset &+ Int(pc))
                 pc &-= 4
             }
