@@ -19,7 +19,7 @@ enum RiscVInstruction {
             case 2:
                 self = .slti(destinationRegister: decoded.destinationRegister, sourceRegister: decoded.sourceRegister, immediate: decoded.immediate)
             case 3:
-                self = .sltiu(destinationRegister: decoded.destinationRegister, sourceRegister: decoded.sourceRegister, immediate: UInt(decoded.immediate))
+                self = .sltiu(destinationRegister: decoded.destinationRegister, sourceRegister: decoded.sourceRegister, immediate: UInt(bitPattern: decoded.immediate))
             case 4:
                 self = .xori(destinationRegister: decoded.destinationRegister, sourceRegister: decoded.sourceRegister, immediate: decoded.immediate)
             case 6:
