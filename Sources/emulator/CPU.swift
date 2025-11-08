@@ -156,7 +156,9 @@ struct CPU {
             registers[Int(destinationRegister)] = Int64(bitPattern: UInt64(bitPattern: registers[Int(sourceRegister)]) >> UInt64(shamt))
         case .srliw(let destinationRegister, let sourceRegister, let shamt):
             //TODO: SLLIW, SRLIW, and SRAIW encodings with imm[5] ≠ 0 are reserved.
-            registers[Int(destinationRegister)] = Int64(UInt32(bitPattern: Int32(registers[Int(sourceRegister)] >> Int64(shamt)) & ((1 << 32) - 1)).signExtension())
+            let firstOperand = UInt32(UInt64(bitPattern: registers[Int(sourceRegister)]) & 0xffffffff)
+            let secondOperand = UInt32(shamt)
+            registers[Int(destinationRegister)] = Int64((firstOperand >> secondOperand).signExtension())
         case .srai(let destinationRegister, let sourceRegister, let shamt):
             registers[Int(destinationRegister)] = registers[Int(sourceRegister)] >> Int64(shamt)
         case .sraiw(let destinationRegister, let sourceRegister, let shamt):
