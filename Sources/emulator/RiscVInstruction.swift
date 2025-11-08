@@ -144,7 +144,7 @@ enum RiscVInstruction {
                 return nil
             }
         case 0xf:
-            guard encodedInstruction == 0xf else {
+            guard encodedInstruction & 0xfffff == 0xf else {
                 return nil
             }
             self = .fence
@@ -157,6 +157,8 @@ enum RiscVInstruction {
                     self = .ecall
                 case 1:
                     self = .ebreak
+                case 770:
+                    self = .mret
                 default:
                     return nil
                 }
@@ -345,4 +347,6 @@ enum RiscVInstruction {
     case csrrwi(destinationRegister: UInt8, immediate: Int, csr: Int)
     case csrrsi(destinationRegister: UInt8, immediate: Int, csr: Int)
     case csrrci(destinationRegister: UInt8, immediate: Int, csr: Int)
+    // Privileged
+    case mret
 }
