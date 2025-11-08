@@ -263,7 +263,16 @@ struct CPU {
         case .csrrc(destinationRegister: let destinationRegister, sourceRegister: let sourceRegister, csr: let csr):
             fatalError("TODO: csrrc \(instruction)")
         case .csrrwi(destinationRegister: let destinationRegister, immediate: let immediate, csr: let csr):
-            fatalError("TODO: csrrwi \(instruction)")
+            // Similar to csrrw, but with an immediate instead.
+            //TODO: This should be atomic, even in multiple-hart environments
+            if destinationRegister != 0 {
+                // CSRRW reads the old value of the CSR, zero-extends the value to XLEN bits,
+                let csrValue = try csrs.value(of: csr)
+                // then writes it to integer register rd.
+                registers[Int(destinationRegister)] = Int64(bitPattern: csrValue)
+            }
+            // The initial value in rs1 is written to the CSR.
+            try csrs.set(csr, to: UInt64(immediate).signExtension(ofBitCount: 5))
         case .csrrsi(destinationRegister: let destinationRegister, immediate: let immediate, csr: let csr):
             fatalError("TODO: csrrsi \(instruction)")
         case .csrrci(destinationRegister: let destinationRegister, immediate: let immediate, csr: let csr):
