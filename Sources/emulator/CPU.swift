@@ -254,6 +254,18 @@ struct CPU {
                 break
             }
             registers[Int(destinationRegister)] = dividend / divisor
+        case let .divw(destinationRegister, sourceRegister1, sourceRegister2):
+            let dividend = Int32(bitPatternFromLowerHalfOf: registers[Int(sourceRegister1)])
+            let divisor = Int32(bitPatternFromLowerHalfOf: registers[Int(sourceRegister2)])
+            guard divisor != 0 else { // division by 0
+                registers[Int(destinationRegister)] = -1
+                break
+            }
+            guard dividend != Int32.min || divisor != -1 else { // overflow
+                registers[Int(destinationRegister)] = Int64(Int32.min)
+                break
+            }
+            registers[Int(destinationRegister)] = Int64(dividend / divisor)
         case let .divu(destinationRegister, sourceRegister1, sourceRegister2):
             let dividend = UInt64(bitPattern: registers[Int(sourceRegister1)])
             let divisor = UInt64(bitPattern: registers[Int(sourceRegister2)])

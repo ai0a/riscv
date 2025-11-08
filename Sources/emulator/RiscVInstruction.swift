@@ -297,6 +297,13 @@ enum RiscVInstruction {
                     return nil
                 }
                 self = .sllw(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2)
+            case 4:
+                switch decoded.funct7 {
+                case 1:
+                    self = .divw(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2)
+                default:
+                    return nil
+                }
             case 5:
                 switch decoded.funct7 {
                 case 0:
@@ -373,6 +380,7 @@ enum RiscVInstruction {
     case mulhsu(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
     case mulhu(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
     case div(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
+    case divw(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
     case divu(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
     case rem(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
     case remu(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
