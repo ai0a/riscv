@@ -272,6 +272,14 @@ struct CPU {
                 break
             }
             registers[Int(destinationRegister)] = dividend % divisor
+        case let .remu(destinationRegister, sourceRegister1, sourceRegister2):
+            let dividend = UInt64(bitPattern: registers[Int(sourceRegister1)])
+            let divisor = UInt64(bitPattern: registers[Int(sourceRegister2)])
+            guard divisor != 0 else { // division by 0
+                registers[Int(destinationRegister)] = Int64(bitPattern: dividend)
+                break
+            }
+            registers[Int(destinationRegister)] = Int64(bitPattern: dividend % divisor)
         case .ecall:
             if let ecallHandler {
                 ecallHandler.ecall(cpu: self)
