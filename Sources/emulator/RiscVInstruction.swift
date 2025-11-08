@@ -80,6 +80,8 @@ enum RiscVInstruction {
                 switch decoded.funct7 {
                 case 0:
                     self = .sltu(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2)
+                case 1:
+                    self = .mulhu(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2)
                 default:
                     return nil
                 }
@@ -358,6 +360,7 @@ enum RiscVInstruction {
     case mul(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
     case mulh(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
     case mulhsu(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
+    case mulhu(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
     //zicsr
     case csrrw(destinationRegister: UInt8, sourceRegister: UInt8, csr: Int)
     case csrrs(destinationRegister: UInt8, sourceRegister: UInt8, csr: Int)
