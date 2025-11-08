@@ -92,12 +92,13 @@ struct CPU {
             pc = UInt64(offset &+ Int(pc))
             pc &-= 4
         case .jalr(let destinationRegister, let sourceRegister, let offsetImmediate):
-            registers[Int(destinationRegister)] = Int64(pc)
+            let oldPc = Int64(pc)
             var address = offsetImmediate + Int(registers[Int(sourceRegister)])
             if (address & 1 == 1) {
                 address ^= 1
             }
             pc = UInt64(address)
+            registers[Int(destinationRegister)] = oldPc
         case .beq(let sourceRegister1, let sourceRegister2, let offset):
             if (registers[Int(sourceRegister1)] == registers[Int(sourceRegister2)]) {
                 pc = UInt64(offset &+ Int(pc))
