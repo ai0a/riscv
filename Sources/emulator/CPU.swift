@@ -14,7 +14,7 @@ struct CPU {
     var memory: Memory
     let ecallHandler: (any EcallHandler)?
 
-    public init(pc: UInt64, memory: any Memory, ecallHandler: (any EcallHandler)? = nil) {
+    public init(pc: UInt64, memory: Memory, ecallHandler: (any EcallHandler)? = nil) {
         self.pc = pc
         self.memory = memory
         self.ecallHandler = ecallHandler

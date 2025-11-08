@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Ram: Memory {
+struct Memory {
     var data: Data
     
     func read64Bits(address: UInt64) throws -> UInt64 {

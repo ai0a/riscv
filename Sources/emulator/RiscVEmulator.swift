@@ -24,7 +24,7 @@ struct RiscVEmulator: ParsableCommand {
         let fileData = try Data(contentsOf: url)
         
         // 8mb ish
-        var ram = Ram(data: Data(count: 0x8000000))
+        var ram = Memory(data: Data(count: 0x8000000))
         ram.data.replaceSubrange(ram.data.startIndex...fileData.count, with: fileData)
         var cpu = CPU(
             pc: 0,
