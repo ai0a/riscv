@@ -238,5 +238,6 @@ struct CPU {
         for (index, register) in registers.enumerated() {
             print("x\(index) = 0x\(String(register, radix: 16))")
         }
+        print("pc = 0x\(String(pc, radix: 16))")
     }
 }
