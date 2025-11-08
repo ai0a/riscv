@@ -217,7 +217,7 @@ struct CPU {
             }
             registers[Int(destinationRegister)] = result
         case .sltu(let destinationRegister, let sourceRegister1, let sourceRegister2):
-            let result: Int64 = if registers[Int(sourceRegister1)] < registers[Int(sourceRegister2)] {
+            let result: Int64 = if UInt64(bitPattern: registers[Int(sourceRegister1)]) < UInt64(bitPattern: registers[Int(sourceRegister2)]) {
                 1
             } else {
                 0
