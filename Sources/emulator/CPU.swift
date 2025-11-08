@@ -133,7 +133,7 @@ struct CPU {
             registers[Int(destinationRegister)] = Int64(UInt32(immediate).signExtension())
         case .auipc(let destinationRegister, let immediate):
             // From position of auipic instruction, but pc has already been moved forward
-            registers[Int(destinationRegister)] = Int64(UInt64(immediate) + pc - 4)
+            registers[Int(destinationRegister)] = Int64(bitPattern: (UInt64(immediate) + pc - 4).signExtension(ofBitCount: 32))
         case .addi(let destinationRegister, let sourceRegister, let immediate):
             registers[Int(destinationRegister)] = registers[Int(sourceRegister)] &+ Int64(immediate)
         case .addiw(let destinationRegister, let sourceRegister, let immediate):
