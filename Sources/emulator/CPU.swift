@@ -11,6 +11,13 @@ struct CPU {
     var registers = [Int64](repeating: 0, count: 32)
     var pc: UInt64
     var memory: Memory
+    let ecallHandler: (any EcallHandler)?
+
+    public init(pc: UInt64, memory: any Memory, ecallHandler: (any EcallHandler)? = nil) {
+        self.pc = pc
+        self.memory = memory
+        self.ecallHandler = ecallHandler
+    }
     
     enum ExecutionError: Error {
         case unknownInstruction
@@ -210,6 +217,10 @@ struct CPU {
         case .and(let destinationRegister, let sourceRegister1, let sourceRegister2):
             registers[Int(destinationRegister)] = registers[Int(sourceRegister1)] & registers[Int(sourceRegister2)]
         case .ecall:
+            if let ecallHandler {
+                ecallHandler.ecall(cpu: self)
+                break
+            }
             //TODO
             break
         case .ebreak:
