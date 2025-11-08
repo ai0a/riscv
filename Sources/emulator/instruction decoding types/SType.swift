@@ -19,6 +19,6 @@ struct SType {
         let bits0Thru4 = (encodedInstruction >> 6) & ((1 << 5) - 1)
         let bits5Thru11 = (encodedInstruction >> 25) << 5
         let uImmediate = bits0Thru4 | bits5Thru11
-        immediate = Int((uImmediate << 11).signExtension() >> 11)
+        immediate = Int((uImmediate << 20).signExtension() >> 20)
     }
 }
