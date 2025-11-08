@@ -17,7 +17,7 @@ struct BType {
         sourceRegister1 = RiscVDecoding.sourceRegister1(from: encodedInstruction)
         sourceRegister2 = RiscVDecoding.sourceRegister2(from: encodedInstruction)
         funct3 = RiscVDecoding.funct3(from: encodedInstruction)
-        let bits1thru4 = ((encodedInstruction >> 1) & 0x1e)
+        let bits1thru4 = ((encodedInstruction >> 7) & 0x1e)
         let bit11 = ((encodedInstruction >> 7) & 1) << 11
         let bits5thru10 = (encodedInstruction & 0x7E000000) >> 20
         let bit12 = (encodedInstruction >> 19) & 0x1000
