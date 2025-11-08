@@ -294,6 +294,18 @@ struct CPU {
                 break
             }
             registers[Int(destinationRegister)] = dividend % divisor
+        case let .remw(destinationRegister, sourceRegister1, sourceRegister2):
+            let dividend = Int32(bitPatternFromLowerHalfOf: registers[Int(sourceRegister1)])
+            let divisor = Int32(bitPatternFromLowerHalfOf: registers[Int(sourceRegister2)])
+            guard divisor != 0 else { // division by 0
+                registers[Int(destinationRegister)] = registers[Int(sourceRegister1)]
+                break
+            }
+            guard dividend != Int32.min || divisor != -1 else { // overflow
+                registers[Int(destinationRegister)] = 0
+                break
+            }
+            registers[Int(destinationRegister)] = Int64(dividend % divisor)
         case let .remu(destinationRegister, sourceRegister1, sourceRegister2):
             let dividend = UInt64(bitPattern: registers[Int(sourceRegister1)])
             let divisor = UInt64(bitPattern: registers[Int(sourceRegister2)])
