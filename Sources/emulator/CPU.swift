@@ -197,7 +197,7 @@ struct CPU {
             let secondOperand = Int32(bitPatternFromLowerHalfOf: registers[Int(sourceRegister2)] & ((1 << 32) - 1)) & 0x1f
             registers[Int(destinationRegister)] =  Int64(firstOperand << secondOperand)
         case .srl(let destinationRegister, let sourceRegister1, let sourceRegister2):
-            registers[Int(destinationRegister)] = registers[Int(sourceRegister1)] >> (registers[Int(sourceRegister2)] & 0x3f)
+            registers[Int(destinationRegister)] = Int64(bitPattern: UInt64(bitPattern: registers[Int(sourceRegister1)]) >> UInt64(bitPattern: registers[Int(sourceRegister2)] & 0x3f))
         case .srlw(let destinationRegister, let sourceRegister1, let sourceRegister2):
             let firstOperand = Int32(bitPatternFromLowerHalfOf: registers[Int(sourceRegister1)] & ((1 << 32) - 1))
             let secondOperand = Int32(bitPatternFromLowerHalfOf: registers[Int(sourceRegister2)] & ((1 << 32) - 1)) & 0x1f
