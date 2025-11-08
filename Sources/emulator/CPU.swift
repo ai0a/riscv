@@ -9,6 +9,7 @@ import Foundation
 
 struct CPU {
     var registers = [Int64](repeating: 0, count: 32)
+    var csrs = CSRS()
     var pc: UInt64
     var memory: Memory
     let ecallHandler: (any EcallHandler)?
@@ -224,8 +225,13 @@ struct CPU {
             //TODO
             break
         case .ebreak:
-            //TODO
-            break
+            fatalError("TODO: ebreak")
+        //TODO: Instructions that access a non-existent CSR are reserved. Attempts to access a CSR without
+        // appropriate privilege level raise illegal-instruction exception
+        //TODO: Machine-mode standard read-write CSRs 0x7A0-0x7BF are reserved for use by the debug system. Of
+        // these CSRs, 0x7A0-0x7AF are accessible to machine mode, whereas 0x7B0-0x7BF are only visible to
+        // debug mode. Implementations should raise illegal-instruction exceptions on machine-mode access to
+        // the latter set of registers.
         case .csrrw(destinationRegister: let destinationRegister, sourceRegister: let sourceRegister, csr: let csr):
             fatalError("TODO: csrrw \(instruction)")
         case .csrrs(destinationRegister: let destinationRegister, sourceRegister: let sourceRegister, csr: let csr):

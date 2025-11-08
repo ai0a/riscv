@@ -30,3 +30,14 @@ extension UInt8 {
         Int8(bitPattern: self)
     }
 }
+
+extension UInt64 {
+    func signExtension(ofBitCount bitCount: Self) -> Self {
+        var value = self & ((1 << bitCount) - 1)
+        let sign = (value & (1 << (bitCount - 1))) != 0 ? 1 as UInt64 : 0 as UInt64
+        for i in bitCount..<64 {
+            value |= (sign << i)
+        }
+        return value
+    }
+}
