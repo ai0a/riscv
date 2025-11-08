@@ -308,6 +308,8 @@ enum RiscVInstruction {
                 switch decoded.funct7 {
                 case 0:
                     self = .srlw(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2)
+                case 1:
+                    self = .divuw(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2)
                 case 32:
                     self = .sraw(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2)
                 default:
@@ -382,6 +384,7 @@ enum RiscVInstruction {
     case div(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
     case divw(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
     case divu(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
+    case divuw(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
     case rem(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
     case remu(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
     //zicsr

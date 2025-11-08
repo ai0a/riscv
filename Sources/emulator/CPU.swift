@@ -274,6 +274,14 @@ struct CPU {
                 break
             }
             registers[Int(destinationRegister)] = Int64(bitPattern: dividend / divisor)
+        case let .divuw(destinationRegister, sourceRegister1, sourceRegister2):
+            let dividend = UInt32(bitPattern: Int32(bitPatternFromLowerHalfOf: registers[Int(sourceRegister1)]))
+            let divisor = UInt32(bitPattern: Int32(bitPatternFromLowerHalfOf: registers[Int(sourceRegister2)]))
+            guard divisor != 0 else { // division by 0
+                registers[Int(destinationRegister)] = Int64(-1 as Int32) // Same binary repr. as UInt64.max
+                break
+            }
+            registers[Int(destinationRegister)] = Int64(Int32(bitPattern: dividend / divisor))
         case let .rem(destinationRegister, sourceRegister1, sourceRegister2):
             let dividend = registers[Int(sourceRegister1)]
             let divisor = registers[Int(sourceRegister2)]
