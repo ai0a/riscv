@@ -18,6 +18,8 @@
 	rdtime x7 # Will read some number into x7, probably 0
 
 	rdcycle x8
+
+	rdinstret x9
 # Expects:
 # x0 = 0x0
 # x1 = 0x2aaaaaaaaaaaaaaa
@@ -28,7 +30,7 @@
 # x6 = 0x8
 # x7 = something small, probably 0
 # x8 = 0x1c
-# x9 = 0x0
+# x9 = 0x1c
 # x10 = 0x0
 # x11 = 0x0
 # x12 = 0x0

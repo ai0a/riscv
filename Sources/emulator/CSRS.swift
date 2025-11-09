@@ -10,6 +10,9 @@ struct CSRS {
 			return cycleCount
 		case .time:
 			return UInt64(bitPattern: Int64(Date().timeIntervalSince(timeStart)))
+		case .instret:
+			// Since cycleCount is just the amount of instructions executed, can just use that
+			return cycleCount - 1
 		case .mhartid:
 			return 0 // TODO: Other harts
 		case .mie:
@@ -76,6 +79,7 @@ struct CSRS {
 fileprivate enum CSR: Int {
 	case cycle = 0xC00
 	case time = 0xC01
+	case instret = 0xC02
 	case mhartid = 0xF14
 	case mie = 0x304
 	case mtvec = 0x305
