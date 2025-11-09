@@ -237,6 +237,14 @@ enum RiscVInstruction {
             default:
                 return nil
             }
+        case 0x7:
+            let decoded = IType(encodedInstruction: encodedInstruction)
+            switch decoded.funct3 {
+            case 2:
+                self = .flw(destinationRegister: decoded.destinationRegister, sourceRegister: decoded.sourceRegister, immediate: decoded.immediate)
+            default:
+                return nil
+            }
         case 0x23:
             let decoded = SType(encodedInstruction: encodedInstruction)
             switch (decoded.funct3) {
@@ -385,6 +393,8 @@ enum RiscVInstruction {
     case xor(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
     case or(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
     case and(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
+    // f extension
+    case flw(destinationRegister: UInt8, sourceRegister: UInt8, immediate: Int)
     // m extension
     case mul(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
     case mulw(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)

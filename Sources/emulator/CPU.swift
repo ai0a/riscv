@@ -324,6 +324,10 @@ struct CPU {
                 break
             }
             registers[Int(destinationRegister)] = Int64(Int32(bitPattern: dividend % divisor))
+        case let .flw(destinationRegister, sourceRegister, immediate):
+            let address = UInt64(bitPattern: registers[Int(sourceRegister)]) &+ UInt64(bitPattern: Int64(immediate))
+            let value = try memory.read32Bits(address: address).asNaNBoxedDouble
+            fpRegisters[Int(destinationRegister)] = value
         case .ecall:
             if let ecallHandler {
                 ecallHandler.ecall(cpu: self)
