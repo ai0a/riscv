@@ -331,6 +331,8 @@ struct CPU {
         case .fadds(let destinationRegister, let sourceRegister1, let sourceRegister2, _):
             // TODO: Rounding mode
             fpRegisters[Int(destinationRegister)] = Double(nanBoxing: fpRegisters[Int(sourceRegister1)].nanBoxedFloat + fpRegisters[Int(sourceRegister2)].nanBoxedFloat)
+        case .fmvxw(let destinationRegister, let sourceRegister):
+            registers[Int(destinationRegister)] = Int64(fpRegisters[Int(sourceRegister)].nanBoxedFloat.bitPattern.signExtension())
         case .ecall:
             if let ecallHandler {
                 ecallHandler.ecall(cpu: self)
