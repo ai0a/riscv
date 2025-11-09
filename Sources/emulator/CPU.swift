@@ -27,6 +27,7 @@ struct CPU {
     mutating func executeSingleInstruction() throws{
         // x0 is always 0
         registers[0] = 0
+        csrs.cycleCount += 1
         
         let encodedInstruction = try fetchInstruction()
         guard let instruction = RiscVInstruction(encodedInstruction: encodedInstruction) else {

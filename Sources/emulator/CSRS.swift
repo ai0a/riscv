@@ -6,6 +6,8 @@ struct CSRS {
 			throw Error.unknownCSR(index) // Not correct, should be reserved. See TODO in CPU.swift
 		}
 		switch register {
+		case .cycle:
+			return cycleCount
 		case .time:
 			return UInt64(bitPattern: Int64(Date().timeIntervalSince(timeStart)))
 		case .mhartid:
@@ -67,10 +69,12 @@ struct CSRS {
 
 	var mtvec: UInt64 = 0
 	var mepc: UInt64 = 0
+	var cycleCount: UInt64 = 0
 	let timeStart = Date()
 }
 
 fileprivate enum CSR: Int {
+	case cycle = 0xC00
 	case time = 0xC01
 	case mhartid = 0xF14
 	case mie = 0x304

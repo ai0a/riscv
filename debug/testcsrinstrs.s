@@ -16,6 +16,8 @@
 	csrrs x6,mepc,x0
 
 	rdtime x7 # Will read some number into x7, probably 0
+
+	rdcycle x8
 # Expects:
 # x0 = 0x0
 # x1 = 0x2aaaaaaaaaaaaaaa
@@ -25,7 +27,7 @@
 # x5 = 0x-8
 # x6 = 0x8
 # x7 = something small, probably 0
-# x8 = 0x0
+# x8 = 0x1c
 # x9 = 0x0
 # x10 = 0x0
 # x11 = 0x0
