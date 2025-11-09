@@ -362,8 +362,9 @@ struct CPU {
             // The initial value in integer register rs1 is treated as a bit mask that specifies bit positions to be set in the CSR. Any bit that
             // is high in rs1 will cause the corresponding bit to be set in the CSR, if that CSR bit is writable.
             // Other bits in the CSR are unaffected (though CSRs might have side effects when written).
-            guard registers[Int(sourceRegister)] == 0 else {
-                fatalError("TODO: CSRRS Setting \(instruction) (rs1 = \(registers[Int(sourceRegister)]))")
+            let bitMask = UInt64(bitPattern: registers[Int(sourceRegister)])
+            if bitMask != 0 {
+                try csrs.set(csr, to: csrValue | bitMask)
             }
         case .csrrc(destinationRegister: let destinationRegister, sourceRegister: let sourceRegister, csr: let csr):
             fatalError("TODO: csrrc \(instruction)")
