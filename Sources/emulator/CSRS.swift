@@ -9,6 +9,8 @@ struct CSRS {
 			throw Error.unknownCSR(index) // Not correct, should be reserved. See TODO in CPU.swift
 		}
 		switch register {
+		case .fcsr:
+			return UInt64(fcsr)
 		case .cycle:
 			return cycleCount
 		case .time:
@@ -48,6 +50,9 @@ struct CSRS {
 			throw Error.unknownCSR(index) // Not correct, should be reserved. See TODO in CPU.swift
 		}
 		switch register {
+		case .fcsr:
+			// The first 24 bits are read only 0
+			fcsr = UInt32(value & 0x7F)
 		case .mie:
 			break //TODO
 		case .mtvec:
@@ -73,6 +78,7 @@ struct CSRS {
 		case unwritable
 	}
 
+	var fcsr: UInt32 = 0
 	var mtvec: UInt64 = 0
 	var mepc: UInt64 = 0
 	var cycleCount: UInt64 = 0
@@ -80,6 +86,7 @@ struct CSRS {
 }
 
 fileprivate enum CSR: Int {
+	case fcsr = 0x3
 	case cycle = 0xC00
 	case time = 0xC01
 	case instret = 0xC02
