@@ -367,7 +367,12 @@ struct CPU {
                 try csrs.set(csr, to: csrValue | bitMask)
             }
         case .csrrc(destinationRegister: let destinationRegister, sourceRegister: let sourceRegister, csr: let csr):
-            fatalError("TODO: csrrc \(instruction)")
+            let csrValue = try csrs.value(of: csr)
+            registers[Int(destinationRegister)] = Int64(bitPattern: csrValue)
+            let bitMask = UInt64(bitPattern: registers[Int(sourceRegister)])
+            if bitMask != 0 {
+                try csrs.set(csr, to: csrValue & ~bitMask)
+            }
         case .csrrwi(destinationRegister: let destinationRegister, immediate: let immediate, csr: let csr):
             // Similar to csrrw, but with an immediate instead.
             //TODO: This should be atomic, even in multiple-hart environments
