@@ -385,9 +385,19 @@ struct CPU {
             // The initial value in rs1 is written to the CSR.
             try csrs.set(csr, to: UInt64(immediate).signExtension(ofBitCount: 5))
         case .csrrsi(destinationRegister: let destinationRegister, immediate: let immediate, csr: let csr):
-            fatalError("TODO: csrrsi \(instruction)")
+            let csrValue = try csrs.value(of: csr)
+            registers[Int(destinationRegister)] = Int64(bitPattern: csrValue)
+            let bitMask = UInt64(bitPattern: Int64(immediate))
+            if bitMask != 0 {
+                try csrs.set(csr, to: csrValue | bitMask)
+            }
         case .csrrci(destinationRegister: let destinationRegister, immediate: let immediate, csr: let csr):
-            fatalError("TODO: csrrci \(instruction)")
+            let csrValue = try csrs.value(of: csr)
+            registers[Int(destinationRegister)] = Int64(bitPattern: csrValue)
+            let bitMask = UInt64(bitPattern: Int64(immediate))
+            if bitMask != 0 {
+                try csrs.set(csr, to: csrValue & ~bitMask)
+            }
         case .mret:
             //TODO: There are MANY more things that should happen here
             pc = csrs.mepc

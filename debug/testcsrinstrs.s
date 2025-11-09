@@ -6,14 +6,22 @@
 	li x3,0b0010000010101010101010101010101010101010100000001010000010101010
 	csrrc x0,mepc,x3
 	csrrs x4,mepc,x0
+
+	csrrw x0,mepc,x0 # Should set mepc to all zeroes
+
+	csrrsi x0,mepc,0b11010
+	csrrs x5,mepc,x0
+
+	csrrci x0,mepc,0b10000
+	csrrs x6,mepc,x0
 # Expects:
 # x0 = 0x0
 # x1 = 0x2aaaaaaaaaaaaaaa
 # x2 = 0x2aaaaaaaaaaaaaa8
 # x3 = 0x20aaaaaaaa80a0aa
 # x4 = 0xa000000002a0a00
-# x5 = 0x0
-# x6 = 0x0
+# x5 = 0x-8
+# x6 = 0x8
 # x7 = 0x0
 # x8 = 0x0
 # x9 = 0x0
