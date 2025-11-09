@@ -9,6 +9,8 @@ struct CSRS {
 			throw Error.unknownCSR(index) // Not correct, should be reserved. See TODO in CPU.swift
 		}
 		switch register {
+		case .fflags:
+			return UInt64(fcsr & 0x1F)
 		case .fcsr:
 			return UInt64(fcsr)
 		case .cycle:
@@ -50,6 +52,9 @@ struct CSRS {
 			throw Error.unknownCSR(index) // Not correct, should be reserved. See TODO in CPU.swift
 		}
 		switch register {
+		case .fflags:
+			let oldFcsrValue = try self.value(of: CSR.fcsr.rawValue)
+			try set(CSR.fcsr.rawValue, to: oldFcsrValue & ~0x1f | value)
 		case .fcsr:
 			// The first 24 bits are read only 0
 			fcsr = UInt32(value & 0x7F)
@@ -86,6 +91,7 @@ struct CSRS {
 }
 
 fileprivate enum CSR: Int {
+	case fflags = 0x001
 	case fcsr = 0x3
 	case cycle = 0xC00
 	case time = 0xC01
