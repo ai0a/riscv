@@ -2,6 +2,9 @@ import Foundation
 
 struct CSRS {
 	func value(of index: Int) throws -> UInt64 {
+		if index == 0x300 {
+			return 0 //TODO: This is mstatus
+		}
 		guard let register = CSR(rawValue: index) else {
 			throw Error.unknownCSR(index) // Not correct, should be reserved. See TODO in CPU.swift
 		}
