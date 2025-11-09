@@ -328,6 +328,9 @@ struct CPU {
             let address = UInt64(bitPattern: registers[Int(sourceRegister)]) &+ UInt64(bitPattern: Int64(immediate))
             let value = try memory.read32Bits(address: address).asNaNBoxedDouble
             fpRegisters[Int(destinationRegister)] = value
+        case .fadds(let destinationRegister, let sourceRegister1, let sourceRegister2, _):
+            // TODO: Rounding mode
+            fpRegisters[Int(destinationRegister)] = Double(nanBoxing: fpRegisters[Int(sourceRegister1)].nanBoxedFloat + fpRegisters[Int(sourceRegister2)].nanBoxedFloat)
         case .ecall:
             if let ecallHandler {
                 ecallHandler.ecall(cpu: self)
