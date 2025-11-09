@@ -420,6 +420,13 @@ struct CPU {
         for (index, register) in registers.enumerated() {
             print("x\(index) = 0x\(String(register, radix: 16))")
         }
+        for (index, register) in fpRegisters.enumerated() {
+            if register.isNaN && !register.nanBoxedFloat.isNaN && register.bitPattern & 0xffffffff00000000 == 0xffffffff00000000 {
+                print("f\(index) = \(register.nanBoxedFloat) (nan boxed to 64 bits) (0x\(String(register.bitPattern, radix: 16)))")
+            } else {
+                print("f\(index) = \(register) (0x\(String(register.bitPattern, radix: 16)))")
+            }
+        }
         print("pc = 0x\(String(pc, radix: 16))")
     }
 }
