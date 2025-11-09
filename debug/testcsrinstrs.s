@@ -14,6 +14,8 @@
 
 	csrrci x0,mepc,0b10000
 	csrrs x6,mepc,x0
+
+	rdtime x7 # Will read some number into x7, probably 0
 # Expects:
 # x0 = 0x0
 # x1 = 0x2aaaaaaaaaaaaaaa
@@ -22,7 +24,7 @@
 # x4 = 0xa000000002a0a00
 # x5 = 0x-8
 # x6 = 0x8
-# x7 = 0x0
+# x7 = something small, probably 0
 # x8 = 0x0
 # x9 = 0x0
 # x10 = 0x0

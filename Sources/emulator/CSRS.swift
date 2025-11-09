@@ -1,9 +1,13 @@
+import Foundation
+
 struct CSRS {
 	func value(of index: Int) throws -> UInt64 {
 		guard let register = CSR(rawValue: index) else {
 			throw Error.unknownCSR(index) // Not correct, should be reserved. See TODO in CPU.swift
 		}
 		switch register {
+		case .time:
+			return UInt64(bitPattern: Int64(Date().timeIntervalSince(timeStart)))
 		case .mhartid:
 			return 0 // TODO: Other harts
 		case .mie:
@@ -63,9 +67,11 @@ struct CSRS {
 
 	var mtvec: UInt64 = 0
 	var mepc: UInt64 = 0
+	let timeStart = Date()
 }
 
 fileprivate enum CSR: Int {
+	case time = 0xC01
 	case mhartid = 0xF14
 	case mie = 0x304
 	case mtvec = 0x305
