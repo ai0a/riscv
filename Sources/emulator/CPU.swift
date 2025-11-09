@@ -9,6 +9,7 @@ import Foundation
 
 struct CPU {
     var registers = [Int64](repeating: 0, count: 32)
+    var fpRegisters = [Double](repeating: 0, count: 32)
     var csrs = CSRS()
     var pc: UInt64
     var memory: Memory
