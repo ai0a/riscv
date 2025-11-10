@@ -347,6 +347,16 @@ struct CPU {
             let firstOperand = fpRegisters[Int(sourceRegister1)].nanBoxedFloat
             let secondOperand = fpRegisters[Int(sourceRegister2)].nanBoxedFloat
             registers[Int(destinationRegister)] = if firstOperand == secondOperand { 1 } else { 0 }
+        case .flts(let destinationRegister, let sourceRegister1, let sourceRegister2):
+            let firstOperand = fpRegisters[Int(sourceRegister1)].nanBoxedFloat
+            let secondOperand = fpRegisters[Int(sourceRegister2)].nanBoxedFloat
+            let (result, exceptions) = firstOperand.lessThanTrackingExceptions(secondOperand)
+            registers[Int(destinationRegister)] = if result { 1 } else { 0 }
+            try csrs.addFloatingPointExceptions(exceptions)
+            // Invalid even if quiet NaNs
+            if firstOperand.isNaN || secondOperand.isNaN {
+                try csrs.addFloatingPointExceptions([.invalid])
+            }
         case .fles(let destinationRegister, let sourceRegister1, let sourceRegister2):
             let firstOperand = fpRegisters[Int(sourceRegister1)].nanBoxedFloat
             let secondOperand = fpRegisters[Int(sourceRegister2)].nanBoxedFloat
