@@ -376,6 +376,12 @@ struct CPU {
             let (value, exceptions) = fpRegisters[Int(sourceRegister)].nanBoxedFloat.squareRootTrackingExceptions()
             fpRegisters[Int(destinationRegister)] = Double(nanBoxing: value)
             try csrs.addFloatingPointExceptions(exceptions)
+        case .fsgnjs(let destinationRegister, let sourceRegister1, let sourceRegister2):
+            var value = fpRegisters[Int(sourceRegister1)].nanBoxedFloat
+            if value.sign != fpRegisters[Int(sourceRegister2)].nanBoxedFloat.sign {
+                value = -value
+            }
+            fpRegisters[Int(destinationRegister)] = Double(nanBoxing: value)
         case .fmins(let destinationRegister, let sourceRegister1, let sourceRegister2):
             let firstOperand = fpRegisters[Int(sourceRegister1)].nanBoxedFloat
             let secondOperand = fpRegisters[Int(sourceRegister2)].nanBoxedFloat
