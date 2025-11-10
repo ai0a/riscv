@@ -667,6 +667,10 @@ struct CPU {
             //TODO: Rounding mode
             let unconverted = registers[Int(sourceRegister)]
             fpRegisters[Int(destinationRegister)] = Double(nanBoxing: Float(unconverted))
+        case let .fcvtslu(destinationRegister, sourceRegister, _):
+            //TODO: Rounding mode
+            let unconverted = UInt64(bitPattern: registers[Int(sourceRegister)])
+            fpRegisters[Int(destinationRegister)] = Double(nanBoxing: Float(unconverted))
         case .ecall:
             if let ecallHandler {
                 ecallHandler.ecall(cpu: self)
