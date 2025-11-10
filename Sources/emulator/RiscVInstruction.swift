@@ -441,7 +441,7 @@ enum RiscVInstruction {
                     self = .fcvtswu(destinationRegister: decoded.destinationRegister, sourceRegister: decoded.sourceRegister1, roundingMode: decoded.funct3)
                 case 2:
                     self = .fcvtsl(destinationRegister: decoded.destinationRegister, sourceRegister: decoded.sourceRegister1, roundingMode: decoded.funct3)
-                case 4:
+                case 3:
                     self = .fcvtslu(destinationRegister: decoded.destinationRegister, sourceRegister: decoded.sourceRegister1, roundingMode: decoded.funct3)
                 default:
                     return nil
