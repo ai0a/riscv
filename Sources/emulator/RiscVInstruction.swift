@@ -383,6 +383,8 @@ enum RiscVInstruction {
                 switch decoded.funct3 {
                 case 0:
                     self = .fmins(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2)
+                case 1:
+                    self = .fmaxs(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2)
                 default:
                     return nil
                 }
@@ -500,6 +502,7 @@ enum RiscVInstruction {
     case fdivs(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8, roundingMode: UInt8)
     case fsqrts(destinationRegister: UInt8, sourceRegister: UInt8, roundingMode: UInt8)
     case fmins(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
+    case fmaxs(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
     case fcvtws(destinationRegister: UInt8, sourceRegister: UInt8, roundingMode: UInt8)
     case fcvtwus(destinationRegister: UInt8, sourceRegister: UInt8, roundingMode: UInt8)
     case fmvxw(destinationRegister: UInt8, sourceRegister: UInt8)

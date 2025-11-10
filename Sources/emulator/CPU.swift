@@ -395,6 +395,28 @@ struct CPU {
             if firstOperand.isSignalingNaN || secondOperand.isSignalingNaN {
                 try csrs.addFloatingPointExceptions([.invalid])
             }
+        case .fmaxs(let destinationRegister, let sourceRegister1, let sourceRegister2):
+            let firstOperand = fpRegisters[Int(sourceRegister1)].nanBoxedFloat
+            let secondOperand = fpRegisters[Int(sourceRegister2)].nanBoxedFloat
+            let value: Float = if firstOperand.isNaN && secondOperand.isNaN {
+                .nan
+            } else if firstOperand.isNaN {
+                secondOperand
+            } else if secondOperand.isNaN {
+                firstOperand
+            } else if (firstOperand.sign == .minus && firstOperand.isZero) && (secondOperand.sign == .plus && secondOperand.isZero) {
+                secondOperand
+            } else if (secondOperand.sign == .minus && secondOperand.isZero) && (firstOperand.sign == .plus && firstOperand.isZero) {
+                firstOperand
+            } else if secondOperand > firstOperand {
+                secondOperand
+            } else {
+                firstOperand
+            }
+            fpRegisters[Int(destinationRegister)] = Double(nanBoxing: value)
+            if firstOperand.isSignalingNaN || secondOperand.isSignalingNaN {
+                try csrs.addFloatingPointExceptions([.invalid])
+            }
         case let .fcvtws(destinationRegister, sourceRegister, roundingMode):
             let unconverted = fpRegisters[Int(sourceRegister)].nanBoxedFloat
             guard (!unconverted.isInfinite || unconverted.sign != .plus) && !unconverted.isNaN else {
