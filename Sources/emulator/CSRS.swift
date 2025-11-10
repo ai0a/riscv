@@ -88,6 +88,26 @@ struct CSRS {
 	var mepc: UInt64 = 0
 	var cycleCount: UInt64 = 0
 	let timeStart = Date()
+
+	mutating func addFloatingPointExceptions(_ exceptions: Set<FloatingPointException>) throws {
+		var newBits = 0 as UInt32
+		if exceptions.contains(.inexact) {
+			newBits |= 0x1
+		}
+		if exceptions.contains(.underflow) {
+			newBits |= 0x2
+		}
+		if exceptions.contains(.overflow) {
+			newBits |= 0x4
+		}
+		if exceptions.contains(.divisionByZero) {
+			newBits |= 0x8
+		}
+		if exceptions.contains(.invalid) {
+			newBits |= 0x10
+		}
+		try set(CSR.fcsr.rawValue, to: UInt64(fcsr | newBits))
+	}
 }
 
 fileprivate enum CSR: Int {
