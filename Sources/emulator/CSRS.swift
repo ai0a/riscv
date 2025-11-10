@@ -108,6 +108,9 @@ struct CSRS {
 		}
 		try set(CSR.fcsr.rawValue, to: UInt64(fcsr | newBits))
 	}
+	var floatingPointRoundingMode: UInt8 {
+		UInt8((fcsr >> 5) & 0x7)
+	}
 }
 
 fileprivate enum CSR: Int {

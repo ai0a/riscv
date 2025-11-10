@@ -343,6 +343,45 @@ struct CPU {
             let (value, exceptions) = fpRegisters[Int(sourceRegister1)].nanBoxedFloat.multiplyingTrackingExceptions(fpRegisters[Int(sourceRegister2)].nanBoxedFloat)
             fpRegisters[Int(destinationRegister)] = Double(nanBoxing: value)
             try csrs.addFloatingPointExceptions(exceptions)
+        case let .fcvtws(destinationRegister, sourceRegister, roundingMode):
+            let unconverted = fpRegisters[Int(sourceRegister)].nanBoxedFloat
+            guard unconverted > Float(Int32.min) else {
+                registers[Int(destinationRegister)] = Int64(Int32.min)
+                try csrs.addFloatingPointExceptions([.invalid])
+                break
+            }
+            guard !unconverted.isInfinite || unconverted.sign != .minus else {
+                registers[Int(destinationRegister)] = Int64(Int32.min)
+                try csrs.addFloatingPointExceptions([.invalid])
+                break
+            }
+            guard unconverted < Float(Int32.max) else {
+                registers[Int(destinationRegister)] = Int64(Int32.max)
+                try csrs.addFloatingPointExceptions([.invalid])
+                break
+            }
+            guard (!unconverted.isInfinite || unconverted.sign != .plus) && !unconverted.isNaN else {
+                registers[Int(destinationRegister)] = Int64(Int32.max)
+                try csrs.addFloatingPointExceptions([.invalid])
+                break
+            }
+            let effectiveRoundingMode = if roundingMode == 7 { csrs.floatingPointRoundingMode } else { roundingMode }
+            let converted = switch effectiveRoundingMode {
+            case 0, 4:
+                unconverted.rounded()
+            case 1:
+                unconverted
+            case 2:
+                floor(unconverted)
+            case 3:
+                ceil(unconverted)
+            default:
+                fatalError("TODO: Exception for invalid rounding mode")
+            }
+            registers[Int(destinationRegister)] = Int64(Int32(converted))
+            if unconverted != Float(Int64(converted)) {
+                try csrs.addFloatingPointExceptions([.inexact])
+            }
         case .feqs(let destinationRegister, let sourceRegister1, let sourceRegister2):
             let firstOperand = fpRegisters[Int(sourceRegister1)].nanBoxedFloat
             let secondOperand = fpRegisters[Int(sourceRegister2)].nanBoxedFloat

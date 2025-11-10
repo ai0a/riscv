@@ -356,6 +356,13 @@ enum RiscVInstruction {
                 default:
                     return nil
                 }
+            case 0x60:
+                switch decoded.sourceRegister2 {
+                case 0:
+                    self = .fcvtws(destinationRegister: decoded.destinationRegister, sourceRegister: decoded.sourceRegister1, roundingMode: decoded.funct3)
+                default:
+                    return nil
+                }
             case 0x70:
                 switch decoded.funct3 {
                 case 0:
@@ -437,6 +444,7 @@ enum RiscVInstruction {
     case fadds(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8, roundingMode: UInt8)
     case fsubs(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8, roundingMode: UInt8)
     case fmuls(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8, roundingMode: UInt8)
+    case fcvtws(destinationRegister: UInt8, sourceRegister: UInt8, roundingMode: UInt8)
     case fmvxw(destinationRegister: UInt8, sourceRegister: UInt8)
     case feqs(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
     case flts(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
