@@ -364,6 +364,10 @@ struct CPU {
             let firstOperand = fpRegisters[Int(sourceRegister1)].nanBoxedFloat
             let secondOperand = fpRegisters[Int(sourceRegister2)].nanBoxedFloat
             registers[Int(destinationRegister)] = if firstOperand <= secondOperand { 1 } else { 0 }
+            // Invalid even if quiet NaNs
+            if firstOperand.isNaN || secondOperand.isNaN {
+                try csrs.addFloatingPointExceptions([.invalid])
+            }
         case .fmvxw(let destinationRegister, let sourceRegister):
             registers[Int(destinationRegister)] = Int64(fpRegisters[Int(sourceRegister)].nanBoxedFloat.bitPattern.signExtension())
         case .fclasss(let destinationRegister, let sourceRegister):
