@@ -333,6 +333,11 @@ struct CPU {
             let (value, exceptions) = fpRegisters[Int(sourceRegister1)].nanBoxedFloat.addingTrackingExceptions(fpRegisters[Int(sourceRegister2)].nanBoxedFloat)
             fpRegisters[Int(destinationRegister)] = Double(nanBoxing: value)
             try csrs.addFloatingPointExceptions(exceptions)
+        case .fsubs(let destinationRegister, let sourceRegister1, let sourceRegister2, _):
+            // TODO: Rounding mode
+            let (value, exceptions) = fpRegisters[Int(sourceRegister1)].nanBoxedFloat.subtractingTrackingExceptions(fpRegisters[Int(sourceRegister2)].nanBoxedFloat)
+            fpRegisters[Int(destinationRegister)] = Double(nanBoxing: value)
+            try csrs.addFloatingPointExceptions(exceptions)
         case .fmvxw(let destinationRegister, let sourceRegister):
             registers[Int(destinationRegister)] = Int64(fpRegisters[Int(sourceRegister)].nanBoxedFloat.bitPattern.signExtension())
         case .ecall:

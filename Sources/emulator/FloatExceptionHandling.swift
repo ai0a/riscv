@@ -40,6 +40,18 @@ extension Float {
 		
 		return (result, setify(exceptions))
 	}
+
+	func subtractingTrackingExceptions(_ other: Float) -> (Float, exceptions: Set<FloatingPointException>) {
+		// Clear existing floating-point exceptions
+		feclearexcept(FE_ALL_EXCEPT)
+
+		let result = self - other
+		
+		// Capture exceptions
+		let exceptions = fetestexcept(FE_ALL_EXCEPT)
+		
+		return (result, setify(exceptions))
+	}
 }
 
 fileprivate func setify(_ exceptions: Int32) -> Set<FloatingPointException> {
