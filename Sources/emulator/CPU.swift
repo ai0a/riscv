@@ -345,6 +345,11 @@ struct CPU {
             try csrs.addFloatingPointExceptions(exceptions)
         case let .fcvtws(destinationRegister, sourceRegister, roundingMode):
             let unconverted = fpRegisters[Int(sourceRegister)].nanBoxedFloat
+            guard (!unconverted.isInfinite || unconverted.sign != .plus) && !unconverted.isNaN else {
+                registers[Int(destinationRegister)] = Int64(Int32.max)
+                try csrs.addFloatingPointExceptions([.invalid])
+                break
+            }
             guard unconverted > Float(Int32.min) else {
                 registers[Int(destinationRegister)] = Int64(Int32.min)
                 try csrs.addFloatingPointExceptions([.invalid])
@@ -356,11 +361,6 @@ struct CPU {
                 break
             }
             guard unconverted < Float(Int32.max) else {
-                registers[Int(destinationRegister)] = Int64(Int32.max)
-                try csrs.addFloatingPointExceptions([.invalid])
-                break
-            }
-            guard (!unconverted.isInfinite || unconverted.sign != .plus) && !unconverted.isNaN else {
                 registers[Int(destinationRegister)] = Int64(Int32.max)
                 try csrs.addFloatingPointExceptions([.invalid])
                 break
@@ -384,6 +384,11 @@ struct CPU {
             }
         case let .fcvtwus(destinationRegister, sourceRegister, roundingMode):
             let unconverted = fpRegisters[Int(sourceRegister)].nanBoxedFloat
+            guard (!unconverted.isInfinite || unconverted.sign != .plus) && !unconverted.isNaN else {
+                registers[Int(destinationRegister)] = Int64(UInt32.max.signExtension())
+                try csrs.addFloatingPointExceptions([.invalid])
+                break
+            }
             guard unconverted > Float(UInt32.min) - 1 else {
                 registers[Int(destinationRegister)] = Int64(UInt32.min)
                 try csrs.addFloatingPointExceptions([.invalid])
@@ -395,11 +400,6 @@ struct CPU {
                 break
             }
             guard unconverted <= Float(UInt32.max) else {
-                registers[Int(destinationRegister)] = Int64(UInt32.max.signExtension())
-                try csrs.addFloatingPointExceptions([.invalid])
-                break
-            }
-            guard (!unconverted.isInfinite || unconverted.sign != .plus) && !unconverted.isNaN else {
                 registers[Int(destinationRegister)] = Int64(UInt32.max.signExtension())
                 try csrs.addFloatingPointExceptions([.invalid])
                 break
@@ -479,6 +479,11 @@ struct CPU {
             fpRegisters[Int(destinationRegister)] = Double(nanBoxing: Float(bitPattern: bitPattern))
         case let .fcvtls(destinationRegister, sourceRegister, roundingMode):
             let unconverted = fpRegisters[Int(sourceRegister)].nanBoxedFloat
+            guard (!unconverted.isInfinite || unconverted.sign != .plus) && !unconverted.isNaN else {
+                registers[Int(destinationRegister)] = Int64.max
+                try csrs.addFloatingPointExceptions([.invalid])
+                break
+            }
             guard unconverted > Float(Int64.min) else {
                 registers[Int(destinationRegister)] = Int64.min
                 try csrs.addFloatingPointExceptions([.invalid])
@@ -490,11 +495,6 @@ struct CPU {
                 break
             }
             guard unconverted < Float(Int64.max) else {
-                registers[Int(destinationRegister)] = Int64.max
-                try csrs.addFloatingPointExceptions([.invalid])
-                break
-            }
-            guard (!unconverted.isInfinite || unconverted.sign != .plus) && !unconverted.isNaN else {
                 registers[Int(destinationRegister)] = Int64.max
                 try csrs.addFloatingPointExceptions([.invalid])
                 break
@@ -518,6 +518,11 @@ struct CPU {
             }
         case let .fcvtlus(destinationRegister, sourceRegister, roundingMode):
             let unconverted = fpRegisters[Int(sourceRegister)].nanBoxedFloat
+            guard (!unconverted.isInfinite || unconverted.sign != .plus) && !unconverted.isNaN else {
+                registers[Int(destinationRegister)] = UInt64.max.signExtension()
+                try csrs.addFloatingPointExceptions([.invalid])
+                break
+            }
             guard unconverted > Float(UInt64.min) - 1 else {
                 registers[Int(destinationRegister)] = Int64(bitPattern: UInt64.min)
                 try csrs.addFloatingPointExceptions([.invalid])
@@ -529,11 +534,6 @@ struct CPU {
                 break
             }
             guard unconverted <= Float(UInt64.max) else {
-                registers[Int(destinationRegister)] = UInt64.max.signExtension()
-                try csrs.addFloatingPointExceptions([.invalid])
-                break
-            }
-            guard (!unconverted.isInfinite || unconverted.sign != .plus) && !unconverted.isNaN else {
                 registers[Int(destinationRegister)] = UInt64.max.signExtension()
                 try csrs.addFloatingPointExceptions([.invalid])
                 break
