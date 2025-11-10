@@ -576,7 +576,7 @@ struct CPU {
             fpRegisters[Int(destinationRegister)] = Double(nanBoxing: Float(bitPattern: bitPattern))
         case let .fcvtsw(destinationRegister, sourceRegister, _):
             //TODO: Rounding mode
-            let unconverted = registers[Int(sourceRegister)] & 0xffffffff
+            let unconverted = UInt32(UInt64(bitPattern: registers[Int(sourceRegister)]) & 0xffffffff).signExtension()
             fpRegisters[Int(destinationRegister)] = Double(nanBoxing: Float(unconverted))
         case let .fcvtswu(destinationRegister, sourceRegister, _):
             //TODO: Rounding mode
