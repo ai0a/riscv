@@ -516,6 +516,48 @@ struct CPU {
             if unconverted != Float(Int64(converted)) {
                 try csrs.addFloatingPointExceptions([.inexact])
             }
+        case let .fcvtlus(destinationRegister, sourceRegister, roundingMode):
+            let unconverted = fpRegisters[Int(sourceRegister)].nanBoxedFloat
+            guard unconverted > Float(UInt64.min) - 1 else {
+                registers[Int(destinationRegister)] = Int64(bitPattern: UInt64.min)
+                try csrs.addFloatingPointExceptions([.invalid])
+                break
+            }
+            guard !unconverted.isInfinite || unconverted.sign != .minus else {
+                registers[Int(destinationRegister)] = Int64(bitPattern: UInt64.min)
+                try csrs.addFloatingPointExceptions([.invalid])
+                break
+            }
+            guard unconverted <= Float(UInt64.max) else {
+                registers[Int(destinationRegister)] = UInt64.max.signExtension()
+                try csrs.addFloatingPointExceptions([.invalid])
+                break
+            }
+            guard (!unconverted.isInfinite || unconverted.sign != .plus) && !unconverted.isNaN else {
+                registers[Int(destinationRegister)] = UInt64.max.signExtension()
+                try csrs.addFloatingPointExceptions([.invalid])
+                break
+            }
+            let effectiveRoundingMode = if roundingMode == 7 { csrs.floatingPointRoundingMode } else { roundingMode }
+            var converted = switch effectiveRoundingMode {
+            case 0, 4:
+                unconverted.rounded()
+            case 1:
+                unconverted
+            case 2:
+                floor(unconverted)
+            case 3:
+                ceil(unconverted)
+            default:
+                fatalError("TODO: Exception for invalid rounding mode")
+            }
+            if converted < 0 {
+                converted = 0
+            }
+            registers[Int(destinationRegister)] = UInt64(converted).signExtension()
+            if unconverted != Float(UInt64(converted)) {
+                try csrs.addFloatingPointExceptions([.inexact])
+            }
         case .ecall:
             if let ecallHandler {
                 ecallHandler.ecall(cpu: self)
