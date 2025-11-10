@@ -259,6 +259,14 @@ enum RiscVInstruction {
             default:
                 return nil
             }
+        case 0x27:
+            let decoded = SType(encodedInstruction: encodedInstruction)
+            switch decoded.funct3 {
+            case 2:
+                self = .fsw(sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2, immediate: decoded.immediate)
+            default:
+                return nil
+            }
         case 0x1B:
             let decoded = IType(encodedInstruction: encodedInstruction)
             guard decoded.funct3 != 0 else {
@@ -492,6 +500,7 @@ enum RiscVInstruction {
     case and(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
     // f extension
     case flw(destinationRegister: UInt8, sourceRegister: UInt8, immediate: Int)
+    case fsw(sourceRegister1: UInt8, sourceRegister2: UInt8, immediate: Int)
     case fmadds(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8, sourceRegister3: UInt8, roundingMode: UInt8)
     case fmsubs(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8, sourceRegister3: UInt8, roundingMode: UInt8)
     case fnmsubs(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8, sourceRegister3: UInt8, roundingMode: UInt8)
