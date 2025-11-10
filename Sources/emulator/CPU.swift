@@ -388,6 +388,14 @@ struct CPU {
                 value = -value
             }
             fpRegisters[Int(destinationRegister)] = Double(nanBoxing: value)
+        case .fsgnjxs(let destinationRegister, let sourceRegister1, let sourceRegister2):
+            var value = fpRegisters[Int(sourceRegister1)].nanBoxedFloat
+            if value.sign == fpRegisters[Int(sourceRegister2)].nanBoxedFloat.sign {
+                value = abs(value)
+            } else {
+                value = -abs(value)
+            }
+            fpRegisters[Int(destinationRegister)] = Double(nanBoxing: value)
         case .fmins(let destinationRegister, let sourceRegister1, let sourceRegister2):
             let firstOperand = fpRegisters[Int(sourceRegister1)].nanBoxedFloat
             let secondOperand = fpRegisters[Int(sourceRegister2)].nanBoxedFloat

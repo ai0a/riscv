@@ -393,6 +393,8 @@ enum RiscVInstruction {
                     self = .fsgnjs(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2)
                 case 1:
                     self = .fsgnjns(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2)
+                case 2:
+                    self = .fsgnjxs(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2)
                 default:
                     return nil
                 }
@@ -521,6 +523,7 @@ enum RiscVInstruction {
     case fsqrts(destinationRegister: UInt8, sourceRegister: UInt8, roundingMode: UInt8)
     case fsgnjs(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
     case fsgnjns(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
+    case fsgnjxs(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
     case fmins(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
     case fmaxs(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
     case fcvtws(destinationRegister: UInt8, sourceRegister: UInt8, roundingMode: UInt8)
