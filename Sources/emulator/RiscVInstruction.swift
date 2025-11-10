@@ -362,6 +362,8 @@ enum RiscVInstruction {
                     self = .fcvtws(destinationRegister: decoded.destinationRegister, sourceRegister: decoded.sourceRegister1, roundingMode: decoded.funct3)
                 case 1:
                     self = .fcvtwus(destinationRegister: decoded.destinationRegister, sourceRegister: decoded.sourceRegister1, roundingMode: decoded.funct3)
+                case 2:
+                    self = .fcvtls(destinationRegister: decoded.destinationRegister, sourceRegister: decoded.sourceRegister1, roundingMode: decoded.funct3)
                 default:
                     return nil
                 }
@@ -454,6 +456,7 @@ enum RiscVInstruction {
     case fles(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
     case fclasss(destinationRegister: UInt8, sourceRegister: UInt8)
     case fmvwx(destinationRegister: UInt8, sourceRegister: UInt8)
+    case fcvtls(destinationRegister: UInt8, sourceRegister: UInt8, roundingMode: UInt8)
     // m extension
     case mul(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
     case mulw(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
