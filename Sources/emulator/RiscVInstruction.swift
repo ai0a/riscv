@@ -349,6 +349,8 @@ enum RiscVInstruction {
                 switch decoded.funct3 {
                 case 0:
                     self = .fmvxw(destinationRegister: decoded.destinationRegister, sourceRegister: decoded.sourceRegister1)
+                case 1:
+                    self = .fclasss(destinationRegister: decoded.destinationRegister, sourceRegister: decoded.sourceRegister1)
                 default:
                     return nil
                 }
@@ -425,6 +427,7 @@ enum RiscVInstruction {
     case fsubs(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8, roundingMode: UInt8)
     case fmuls(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8, roundingMode: UInt8)
     case fmvxw(destinationRegister: UInt8, sourceRegister: UInt8)
+    case fclasss(destinationRegister: UInt8, sourceRegister: UInt8)
     case fmvwx(destinationRegister: UInt8, sourceRegister: UInt8)
     // m extension
     case mul(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)

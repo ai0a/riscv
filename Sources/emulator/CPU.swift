@@ -345,6 +345,29 @@ struct CPU {
             try csrs.addFloatingPointExceptions(exceptions)
         case .fmvxw(let destinationRegister, let sourceRegister):
             registers[Int(destinationRegister)] = Int64(fpRegisters[Int(sourceRegister)].nanBoxedFloat.bitPattern.signExtension())
+        case .fclasss(let destinationRegister, let sourceRegister):
+            registers[Int(destinationRegister)] = switch fpRegisters[Int(sourceRegister)].nanBoxedFloat.floatingPointClass {
+            case .negativeInfinity:
+                0x1
+            case .negativeNormal:
+                0x2
+            case .negativeSubnormal:
+                0x4
+            case .negativeZero:
+                0x8
+            case .positiveZero:
+                0x10
+            case .positiveSubnormal:
+                0x20
+            case .positiveNormal:
+                0x40
+            case .positiveInfinity:
+                0x80
+            case .signalingNaN:
+                0x100
+            case .quietNaN:
+                0x200
+            }
         case .fmvwx(let destinationRegister, let sourceRegister):
             let bitPattern = UInt32(UInt64(bitPattern: registers[Int(sourceRegister)]) & 0xffffffff)
             fpRegisters[Int(destinationRegister)] = Double(nanBoxing: Float(bitPattern: bitPattern))
