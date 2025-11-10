@@ -347,6 +347,10 @@ struct CPU {
             let firstOperand = fpRegisters[Int(sourceRegister1)].nanBoxedFloat
             let secondOperand = fpRegisters[Int(sourceRegister2)].nanBoxedFloat
             registers[Int(destinationRegister)] = if firstOperand == secondOperand { 1 } else { 0 }
+        case .fles(let destinationRegister, let sourceRegister1, let sourceRegister2):
+            let firstOperand = fpRegisters[Int(sourceRegister1)].nanBoxedFloat
+            let secondOperand = fpRegisters[Int(sourceRegister2)].nanBoxedFloat
+            registers[Int(destinationRegister)] = if firstOperand <= secondOperand { 1 } else { 0 }
         case .fmvxw(let destinationRegister, let sourceRegister):
             registers[Int(destinationRegister)] = Int64(fpRegisters[Int(sourceRegister)].nanBoxedFloat.bitPattern.signExtension())
         case .fclasss(let destinationRegister, let sourceRegister):

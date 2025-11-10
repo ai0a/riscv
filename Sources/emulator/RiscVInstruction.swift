@@ -347,6 +347,8 @@ enum RiscVInstruction {
                 self = .fmuls(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2, roundingMode: decoded.funct3)
             case 0x50:
                 switch decoded.funct3 {
+                case 0:
+                    self = .fles(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2)
                 case 2:
                     self = .feqs(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2)
                 default:
@@ -435,6 +437,7 @@ enum RiscVInstruction {
     case fmuls(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8, roundingMode: UInt8)
     case fmvxw(destinationRegister: UInt8, sourceRegister: UInt8)
     case feqs(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
+    case fles(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
     case fclasss(destinationRegister: UInt8, sourceRegister: UInt8)
     case fmvwx(destinationRegister: UInt8, sourceRegister: UInt8)
     // m extension
