@@ -343,6 +343,11 @@ struct CPU {
             let (value, exceptions) = fpRegisters[Int(sourceRegister1)].nanBoxedFloat.multiplyingTrackingExceptions(fpRegisters[Int(sourceRegister2)].nanBoxedFloat)
             fpRegisters[Int(destinationRegister)] = Double(nanBoxing: value)
             try csrs.addFloatingPointExceptions(exceptions)
+        case .fdivs(let destinationRegister, let sourceRegister1, let sourceRegister2, _):
+            // TODO: Rounding mode
+            let (value, exceptions) = fpRegisters[Int(sourceRegister1)].nanBoxedFloat.dividingTrackingExceptions(fpRegisters[Int(sourceRegister2)].nanBoxedFloat)
+            fpRegisters[Int(destinationRegister)] = Double(nanBoxing: value)
+            try csrs.addFloatingPointExceptions(exceptions)
         case let .fcvtws(destinationRegister, sourceRegister, roundingMode):
             let unconverted = fpRegisters[Int(sourceRegister)].nanBoxedFloat
             guard (!unconverted.isInfinite || unconverted.sign != .plus) && !unconverted.isNaN else {

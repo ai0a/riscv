@@ -53,6 +53,10 @@ extension FloatingPoint {
 		trackExceptions(for: *, on: other)
 	}
 
+	func dividingTrackingExceptions(_ other: Self) -> (Self, exceptions: Set<FloatingPointException>) {
+		trackExceptions(for: /, on: other)
+	}
+
 	func lessThanTrackingExceptions(_ other: Self) -> (Bool, exceptions: Set<FloatingPointException>) {
 		trackExceptions(for: <, on: other)
 	}
