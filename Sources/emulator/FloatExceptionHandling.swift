@@ -27,13 +27,13 @@ enum FloatingPointException {
 	}
 }
 
-extension Float {
+extension FloatingPoint {
 	// Spooky!
-	func addingTrackingExceptions(_ other: Float) -> (Float, exceptions: Set<FloatingPointException>) {
+	private func trackExceptions(for op: (Self, Self) -> Self, on other: Self) -> (Self, exceptions: Set<FloatingPointException>) {
 		// Clear existing floating-point exceptions
 		feclearexcept(FE_ALL_EXCEPT)
 
-		let result = self + other
+		let result = op(self, other)
 		
 		// Capture exceptions
 		let exceptions = fetestexcept(FE_ALL_EXCEPT)
@@ -41,16 +41,16 @@ extension Float {
 		return (result, setify(exceptions))
 	}
 
-	func subtractingTrackingExceptions(_ other: Float) -> (Float, exceptions: Set<FloatingPointException>) {
-		// Clear existing floating-point exceptions
-		feclearexcept(FE_ALL_EXCEPT)
+	func addingTrackingExceptions(_ other: Self) -> (Self, exceptions: Set<FloatingPointException>) {
+		trackExceptions(for: +, on: other)
+	}
 
-		let result = self - other
-		
-		// Capture exceptions
-		let exceptions = fetestexcept(FE_ALL_EXCEPT)
-		
-		return (result, setify(exceptions))
+	func subtractingTrackingExceptions(_ other: Self) -> (Self, exceptions: Set<FloatingPointException>) {
+		trackExceptions(for: -, on: other)
+	}
+
+	func multiplyingTrackingExceptions(_ other: Self) -> (Self, exceptions: Set<FloatingPointException>) {
+		trackExceptions(for: *, on: other)
 	}
 }
 
