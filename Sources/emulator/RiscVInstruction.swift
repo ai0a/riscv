@@ -346,7 +346,12 @@ enum RiscVInstruction {
             case 8:
                 self = .fmuls(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2, roundingMode: decoded.funct3)
             case 0x70:
-                self = .fmvxw(destinationRegister: decoded.destinationRegister, sourceRegister: decoded.sourceRegister1)
+                switch decoded.funct3 {
+                case 0:
+                    self = .fmvxw(destinationRegister: decoded.destinationRegister, sourceRegister: decoded.sourceRegister1)
+                default:
+                    return nil
+                }
             case 0x78:
                 switch decoded.funct3 {
                 case 0:
