@@ -576,7 +576,7 @@ struct CPU {
             fpRegisters[Int(destinationRegister)] = Double(nanBoxing: Float(bitPattern: bitPattern))
         case let .fcvtsw(destinationRegister, sourceRegister, _):
             //TODO: Rounding mode
-            let unconverted = registers[Int(sourceRegister)]
+            let unconverted = registers[Int(sourceRegister)] & 0xffffffff
             fpRegisters[Int(destinationRegister)] = Double(nanBoxing: Float(unconverted))
         case let .fcvtswu(destinationRegister, sourceRegister, _):
             //TODO: Rounding mode
@@ -663,6 +663,10 @@ struct CPU {
             if unconverted != Float(UInt64(converted)) {
                 try csrs.addFloatingPointExceptions([.inexact])
             }
+        case let .fcvtsl(destinationRegister, sourceRegister, _):
+            //TODO: Rounding mode
+            let unconverted = registers[Int(sourceRegister)]
+            fpRegisters[Int(destinationRegister)] = Double(nanBoxing: Float(unconverted))
         case .ecall:
             if let ecallHandler {
                 ecallHandler.ecall(cpu: self)
