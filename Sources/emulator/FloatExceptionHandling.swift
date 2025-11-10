@@ -52,6 +52,18 @@ extension FloatingPoint {
 		return (result, setify(exceptions))
 	}
 
+	func multiplyAddTrackingExceptions(_ other: Self, _ other2: Self) -> (Self, exceptions: Set<FloatingPointException>) {
+		// Clear existing floating-point exceptions
+		feclearexcept(FE_ALL_EXCEPT)
+
+		let result = other2.addingProduct(self, other)
+		
+		// Capture exceptions
+		let exceptions = fetestexcept(FE_ALL_EXCEPT)
+		
+		return (result, setify(exceptions))
+	}
+
 	func addingTrackingExceptions(_ other: Self) -> (Self, exceptions: Set<FloatingPointException>) {
 		trackExceptions(for: +, on: other)
 	}
