@@ -40,6 +40,17 @@ extension FloatingPoint {
 		
 		return (result, setify(exceptions))
 	}
+	func squareRootTrackingExceptions() -> (Self, exceptions: Set<FloatingPointException>) {
+		// Clear existing floating-point exceptions
+		feclearexcept(FE_ALL_EXCEPT)
+
+		let result = self.squareRoot()
+		
+		// Capture exceptions
+		let exceptions = fetestexcept(FE_ALL_EXCEPT)
+		
+		return (result, setify(exceptions))
+	}
 
 	func addingTrackingExceptions(_ other: Self) -> (Self, exceptions: Set<FloatingPointException>) {
 		trackExceptions(for: +, on: other)
