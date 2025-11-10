@@ -344,6 +344,14 @@ enum RiscVInstruction {
             default:
                 return nil
             }
+        case 0x4F:
+            let decoded = R4Type(encodedInstruction: encodedInstruction)
+            switch decoded.funct2 {
+            case 0:
+                self = .fnmadds(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2, sourceRegister3: decoded.sourceRegister3, roundingMode: decoded.roundingMode)
+            default:
+                return nil
+            }
         case 0x53:
             let decoded = RType(encodedInstruction: encodedInstruction)
             switch decoded.funct7 {
@@ -460,6 +468,7 @@ enum RiscVInstruction {
     // f extension
     case flw(destinationRegister: UInt8, sourceRegister: UInt8, immediate: Int)
     case fmadds(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8, sourceRegister3: UInt8, roundingMode: UInt8)
+    case fnmadds(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8, sourceRegister3: UInt8, roundingMode: UInt8)
     case fadds(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8, roundingMode: UInt8)
     case fsubs(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8, roundingMode: UInt8)
     case fmuls(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8, roundingMode: UInt8)
