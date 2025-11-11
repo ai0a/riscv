@@ -378,9 +378,7 @@ struct CPU {
             try csrs.addFloatingPointExceptions(exceptions)
         case .fsgnjs(let destinationRegister, let sourceRegister1, let sourceRegister2):
             var value = fpRegisters[Int(sourceRegister1)].nanBoxedFloat
-            if value.sign != fpRegisters[Int(sourceRegister2)].nanBoxedFloat.sign {
-                value = -value
-            }
+            value = Float(bitPattern: (value.bitPattern & 0x7fffffff) | (fpRegisters[Int(sourceRegister2)].nanBoxedFloat.bitPattern & 0x80000000))
             fpRegisters[Int(destinationRegister)] = Double(nanBoxing: value)
         case .fsgnjns(let destinationRegister, let sourceRegister1, let sourceRegister2):
             var value = fpRegisters[Int(sourceRegister1)].nanBoxedFloat
