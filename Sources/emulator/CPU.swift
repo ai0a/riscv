@@ -545,7 +545,7 @@ struct CPU {
                 try csrs.addFloatingPointExceptions([.invalid])
             }
         case .fmvxw(let destinationRegister, let sourceRegister):
-            registers[Int(destinationRegister)] = Int64(fpRegisters[Int(sourceRegister)].nanBoxedFloat.bitPattern.signExtension())
+            registers[Int(destinationRegister)] = Int64(fpRegisters[Int(sourceRegister)].uncheckingNanBoxedFloat.bitPattern.signExtension())
         case .fclasss(let destinationRegister, let sourceRegister):
             registers[Int(destinationRegister)] = switch fpRegisters[Int(sourceRegister)].nanBoxedFloat.floatingPointClass {
             case .negativeInfinity:
