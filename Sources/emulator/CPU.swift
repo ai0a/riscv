@@ -330,7 +330,7 @@ struct CPU {
             fpRegisters[Int(destinationRegister)] = value
         case .fsw(let sourceRegister1, let sourceRegister2, let immediate):
             let address = UInt64(bitPattern: registers[Int(sourceRegister1)]) &+ UInt64(bitPattern: Int64(immediate))
-            try memory.store32Bits(fpRegisters[Int(sourceRegister2)].nanBoxedFloat.bitPattern, at: address)
+            try memory.store32Bits(fpRegisters[Int(sourceRegister2)].uncheckingNanBoxedFloat.bitPattern, at: address)
         case .fmadds(let destinationRegister, let sourceRegister1, let sourceRegister2, let sourceRegister3, _):
             // TODO: Rounding mode
             let (value, exceptions) = fpRegisters[Int(sourceRegister1)].nanBoxedFloat.multiplyAddTrackingExceptions(fpRegisters[Int(sourceRegister2)].nanBoxedFloat, fpRegisters[Int(sourceRegister3)].nanBoxedFloat)
