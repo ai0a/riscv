@@ -242,6 +242,8 @@ enum RiscVInstruction {
             switch decoded.funct3 {
             case 2:
                 self = .flw(destinationRegister: decoded.destinationRegister, sourceRegister: decoded.sourceRegister, immediate: decoded.immediate)
+            case 3:
+                self = .fld(destinationRegister: decoded.destinationRegister, sourceRegister: decoded.sourceRegister, immediate: decoded.immediate)
             default:
                 return nil
             }
@@ -264,6 +266,8 @@ enum RiscVInstruction {
             switch decoded.funct3 {
             case 2:
                 self = .fsw(sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2, immediate: decoded.immediate)
+            case 3:
+                self = .fsd(sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2, immediate: decoded.immediate)
             default:
                 return nil
             }
@@ -349,6 +353,8 @@ enum RiscVInstruction {
             switch decoded.funct2 {
             case 0:
                 self = .fmadds(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2, sourceRegister3: decoded.sourceRegister3, roundingMode: decoded.roundingMode)
+            case 1:
+                self = .fmaddd(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2, sourceRegister3: decoded.sourceRegister3, roundingMode: decoded.roundingMode)
             default:
                 return nil
             }
@@ -357,6 +363,8 @@ enum RiscVInstruction {
             switch decoded.funct2 {
             case 0:
                 self = .fmsubs(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2, sourceRegister3: decoded.sourceRegister3, roundingMode: decoded.roundingMode)
+            case 1:
+                self = .fmsubd(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2, sourceRegister3: decoded.sourceRegister3, roundingMode: decoded.roundingMode)
             default:
                 return nil
             }
@@ -365,6 +373,8 @@ enum RiscVInstruction {
             switch decoded.funct2 {
             case 0:
                 self = .fnmsubs(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2, sourceRegister3: decoded.sourceRegister3, roundingMode: decoded.roundingMode)
+            case 1:
+                self = .fnmsubd(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2, sourceRegister3: decoded.sourceRegister3, roundingMode: decoded.roundingMode)
             default:
                 return nil
             }
@@ -373,6 +383,8 @@ enum RiscVInstruction {
             switch decoded.funct2 {
             case 0:
                 self = .fnmadds(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2, sourceRegister3: decoded.sourceRegister3, roundingMode: decoded.roundingMode)
+            case 1:
+                self = .fnmaddd(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2, sourceRegister3: decoded.sourceRegister3, roundingMode: decoded.roundingMode)
             default:
                 return nil
             }
@@ -381,12 +393,20 @@ enum RiscVInstruction {
             switch decoded.funct7 {
             case 0:
                 self = .fadds(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2, roundingMode: decoded.funct3)
+            case 1:
+                self = .faddd(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2, roundingMode: decoded.funct3)
             case 4:
                 self = .fsubs(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2, roundingMode: decoded.funct3)
+            case 5:
+                self = .fsubd(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2, roundingMode: decoded.funct3)
             case 8:
                 self = .fmuls(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2, roundingMode: decoded.funct3)
+            case 9:
+                self = .fmuld(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2, roundingMode: decoded.funct3)
             case 12:
                 self = .fdivs(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2, roundingMode: decoded.funct3)
+            case 13:
+                self = .fdivd(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2, roundingMode: decoded.funct3)
             case 0x10:
                 switch decoded.funct3 {
                 case 0:
@@ -395,6 +415,17 @@ enum RiscVInstruction {
                     self = .fsgnjns(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2)
                 case 2:
                     self = .fsgnjxs(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2)
+                default:
+                    return nil
+                }
+            case 0x11:
+                switch decoded.funct3 {
+                case 0:
+                    self = .fsgnjd(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2)
+                case 1:
+                    self = .fsgnjnd(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2)
+                case 2:
+                    self = .fsgnjxd(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2)
                 default:
                     return nil
                 }
@@ -407,8 +438,29 @@ enum RiscVInstruction {
                 default:
                     return nil
                 }
+            case 0x15:
+                switch decoded.funct3 {
+                case 0:
+                    self = .fmind(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2)
+                case 1:
+                    self = .fmaxd(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2)
+                default:
+                    return nil
+                }
+            case 0x20:
+                guard decoded.sourceRegister2 == 1 else {
+                    return nil
+                }
+                self = .fcvtsd(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, roundingMode: decoded.funct3)
+            case 0x21:
+                guard decoded.sourceRegister2 == 0 else {
+                    return nil
+                }
+                self = .fcvtds(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, roundingMode: decoded.funct3)
             case 0x2c:
                 self = .fsqrts(destinationRegister: decoded.destinationRegister, sourceRegister: decoded.sourceRegister1, roundingMode: decoded.funct3)
+            case 0x2d:
+                self = .fsqrtd(destinationRegister: decoded.destinationRegister, sourceRegister: decoded.sourceRegister1, roundingMode: decoded.funct3)
             case 0x50:
                 switch decoded.funct3 {
                 case 0:
@@ -417,6 +469,17 @@ enum RiscVInstruction {
                     self = .flts(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2)
                 case 2:
                     self = .feqs(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2)
+                default:
+                    return nil
+                }
+            case 0x51:
+                switch decoded.funct3 {
+                case 0:
+                    self = .fled(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2)
+                case 1:
+                    self = .fltd(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2)
+                case 2:
+                    self = .feqd(destinationRegister: decoded.destinationRegister, sourceRegister1: decoded.sourceRegister1, sourceRegister2: decoded.sourceRegister2)
                 default:
                     return nil
                 }
@@ -433,6 +496,19 @@ enum RiscVInstruction {
                 default:
                     return nil
                 }
+            case 0x61:
+                switch decoded.sourceRegister2 {
+                case 0:
+                    self = .fcvtwd(destinationRegister: decoded.destinationRegister, sourceRegister: decoded.sourceRegister1, roundingMode: decoded.funct3)
+                case 1:
+                    self = .fcvtwud(destinationRegister: decoded.destinationRegister, sourceRegister: decoded.sourceRegister1, roundingMode: decoded.funct3)
+                case 2:
+                    self = .fcvtld(destinationRegister: decoded.destinationRegister, sourceRegister: decoded.sourceRegister1, roundingMode: decoded.funct3)
+                case 3:
+                    self = .fcvtlud(destinationRegister: decoded.destinationRegister, sourceRegister: decoded.sourceRegister1, roundingMode: decoded.funct3)
+                default:
+                    return nil
+                }
             case 0x68:
                 switch decoded.sourceRegister2 {
                 case 0:
@@ -446,6 +522,19 @@ enum RiscVInstruction {
                 default:
                     return nil
                 }
+            case 0x69:
+                switch decoded.sourceRegister2 {
+                case 0:
+                    self = .fcvtdw(destinationRegister: decoded.destinationRegister, sourceRegister: decoded.sourceRegister1, roundingMode: decoded.funct3)
+                case 1:
+                    self = .fcvtdwu(destinationRegister: decoded.destinationRegister, sourceRegister: decoded.sourceRegister1, roundingMode: decoded.funct3)
+                case 2:
+                    self = .fcvtdl(destinationRegister: decoded.destinationRegister, sourceRegister: decoded.sourceRegister1, roundingMode: decoded.funct3)
+                case 3:
+                    self = .fcvtdlu(destinationRegister: decoded.destinationRegister, sourceRegister: decoded.sourceRegister1, roundingMode: decoded.funct3)
+                default:
+                    return nil
+                }
             case 0x70:
                 switch decoded.funct3 {
                 case 0:
@@ -455,10 +544,26 @@ enum RiscVInstruction {
                 default:
                     return nil
                 }
+            case 0x71:
+                switch decoded.funct3 {
+                case 0:
+                    self = .fmvxd(destinationRegister: decoded.destinationRegister, sourceRegister: decoded.sourceRegister1)
+                case 1:
+                    self = .fclassd(destinationRegister: decoded.destinationRegister, sourceRegister: decoded.sourceRegister1)
+                default:
+                    return nil
+                }
             case 0x78:
                 switch decoded.funct3 {
                 case 0:
                     self = .fmvwx(destinationRegister: decoded.destinationRegister, sourceRegister: decoded.sourceRegister1)
+                default:
+                    return nil
+                }
+            case 0x79:
+                switch decoded.funct3 {
+                case 0:
+                    self = .fmvdx(destinationRegister: decoded.destinationRegister, sourceRegister: decoded.sourceRegister1)
                 default:
                     return nil
                 }
@@ -553,6 +658,39 @@ enum RiscVInstruction {
     case fcvtlus(destinationRegister: UInt8, sourceRegister: UInt8, roundingMode: UInt8)
     case fcvtsl(destinationRegister: UInt8, sourceRegister: UInt8, roundingMode: UInt8)
     case fcvtslu(destinationRegister: UInt8, sourceRegister: UInt8, roundingMode: UInt8)
+    // d extension
+    case fld(destinationRegister: UInt8, sourceRegister: UInt8, immediate: Int)
+    case fsd(sourceRegister1: UInt8, sourceRegister2: UInt8, immediate: Int)
+    case fmaddd(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8, sourceRegister3: UInt8, roundingMode: UInt8)
+    case fmsubd(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8, sourceRegister3: UInt8, roundingMode: UInt8)
+    case fnmsubd(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8, sourceRegister3: UInt8, roundingMode: UInt8)
+    case fnmaddd(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8, sourceRegister3: UInt8, roundingMode: UInt8)
+    case faddd(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8, roundingMode: UInt8)
+    case fsubd(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8, roundingMode: UInt8)
+    case fmuld(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8, roundingMode: UInt8)
+    case fdivd(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8, roundingMode: UInt8)
+    case fsqrtd(destinationRegister: UInt8, sourceRegister: UInt8, roundingMode: UInt8)
+    case fsgnjd(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
+    case fsgnjnd(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
+    case fsgnjxd(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
+    case fmind(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
+    case fmaxd(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
+    case fcvtsd(destinationRegister: UInt8, sourceRegister1: UInt8, roundingMode: UInt8)
+    case fcvtds(destinationRegister: UInt8, sourceRegister1: UInt8, roundingMode: UInt8)
+    case fcvtwd(destinationRegister: UInt8, sourceRegister: UInt8, roundingMode: UInt8)
+    case fcvtwud(destinationRegister: UInt8, sourceRegister: UInt8, roundingMode: UInt8)
+    case fmvxd(destinationRegister: UInt8, sourceRegister: UInt8)
+    case feqd(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
+    case fltd(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
+    case fled(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
+    case fclassd(destinationRegister: UInt8, sourceRegister: UInt8)
+    case fmvdx(destinationRegister: UInt8, sourceRegister: UInt8)
+    case fcvtdw(destinationRegister: UInt8, sourceRegister: UInt8, roundingMode: UInt8)
+    case fcvtdwu(destinationRegister: UInt8, sourceRegister: UInt8, roundingMode: UInt8)
+    case fcvtld(destinationRegister: UInt8, sourceRegister: UInt8, roundingMode: UInt8)
+    case fcvtlud(destinationRegister: UInt8, sourceRegister: UInt8, roundingMode: UInt8)
+    case fcvtdl(destinationRegister: UInt8, sourceRegister: UInt8, roundingMode: UInt8)
+    case fcvtdlu(destinationRegister: UInt8, sourceRegister: UInt8, roundingMode: UInt8)
     // m extension
     case mul(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)
     case mulw(destinationRegister: UInt8, sourceRegister1: UInt8, sourceRegister2: UInt8)

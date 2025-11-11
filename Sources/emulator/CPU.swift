@@ -669,6 +669,358 @@ struct CPU {
             //TODO: Rounding mode
             let unconverted = UInt64(bitPattern: registers[Int(sourceRegister)])
             fpRegisters[Int(destinationRegister)] = Double(nanBoxing: Float(unconverted))
+        case let .fld(destinationRegister, sourceRegister, immediate):
+            let address = UInt64(bitPattern: registers[Int(sourceRegister)]) &+ UInt64(bitPattern: Int64(immediate))
+            let value = Double(bitPattern: try memory.read64Bits(address: address))
+            fpRegisters[Int(destinationRegister)] = value
+        case .fsd(let sourceRegister1, let sourceRegister2, let immediate):
+            let address = UInt64(bitPattern: registers[Int(sourceRegister1)]) &+ UInt64(bitPattern: Int64(immediate))
+            try memory.store64Bits(fpRegisters[Int(sourceRegister2)].bitPattern, at: address)
+        case .fmaddd(let destinationRegister, let sourceRegister1, let sourceRegister2, let sourceRegister3, _):
+            // TODO: Rounding mode
+            let (value, exceptions) = fpRegisters[Int(sourceRegister1)].multiplyAddTrackingExceptions(fpRegisters[Int(sourceRegister2)], fpRegisters[Int(sourceRegister3)])
+            fpRegisters[Int(destinationRegister)] = value
+            try csrs.addFloatingPointExceptions(exceptions)
+        case .fmsubd(let destinationRegister, let sourceRegister1, let sourceRegister2, let sourceRegister3, _):
+            // TODO: Rounding mode
+            let (value, exceptions) = fpRegisters[Int(sourceRegister1)].multiplyAddTrackingExceptions(fpRegisters[Int(sourceRegister2)], -fpRegisters[Int(sourceRegister3)])
+            fpRegisters[Int(destinationRegister)] = value
+            try csrs.addFloatingPointExceptions(exceptions)
+        case .fnmsubd(let destinationRegister, let sourceRegister1, let sourceRegister2, let sourceRegister3, _):
+            // TODO: Rounding mode
+            let (value, exceptions) = fpRegisters[Int(sourceRegister1)].multiplyAddTrackingExceptions(-fpRegisters[Int(sourceRegister2)], fpRegisters[Int(sourceRegister3)])
+            fpRegisters[Int(destinationRegister)] = value
+            try csrs.addFloatingPointExceptions(exceptions)
+        case .fnmaddd(let destinationRegister, let sourceRegister1, let sourceRegister2, let sourceRegister3, _):
+            // TODO: Rounding mode
+            let (value, exceptions) = fpRegisters[Int(sourceRegister1)].multiplySubtractTrackingExceptions(-fpRegisters[Int(sourceRegister2)], fpRegisters[Int(sourceRegister3)])
+            fpRegisters[Int(destinationRegister)] = value
+            try csrs.addFloatingPointExceptions(exceptions)
+        case .faddd(let destinationRegister, let sourceRegister1, let sourceRegister2, _):
+            // TODO: Rounding mode
+            let (value, exceptions) = fpRegisters[Int(sourceRegister1)].addingTrackingExceptions(fpRegisters[Int(sourceRegister2)])
+            fpRegisters[Int(destinationRegister)] = value
+            try csrs.addFloatingPointExceptions(exceptions)
+        case .fsubd(let destinationRegister, let sourceRegister1, let sourceRegister2, _):
+            // TODO: Rounding mode
+            let (value, exceptions) = fpRegisters[Int(sourceRegister1)].subtractingTrackingExceptions(fpRegisters[Int(sourceRegister2)])
+            fpRegisters[Int(destinationRegister)] = value
+            try csrs.addFloatingPointExceptions(exceptions)
+        case .fmuld(let destinationRegister, let sourceRegister1, let sourceRegister2, _):
+            // TODO: Rounding mode
+            let (value, exceptions) = fpRegisters[Int(sourceRegister1)].multiplyingTrackingExceptions(fpRegisters[Int(sourceRegister2)])
+            fpRegisters[Int(destinationRegister)] = value
+            try csrs.addFloatingPointExceptions(exceptions)
+        case .fdivd(let destinationRegister, let sourceRegister1, let sourceRegister2, _):
+            // TODO: Rounding mode
+            let (value, exceptions) = fpRegisters[Int(sourceRegister1)].dividingTrackingExceptions(fpRegisters[Int(sourceRegister2)])
+            fpRegisters[Int(destinationRegister)] = value
+            try csrs.addFloatingPointExceptions(exceptions)
+        case .fsqrtd(let destinationRegister, let sourceRegister, _):
+            // TODO: Rounding mode
+            let (value, exceptions) = fpRegisters[Int(sourceRegister)].squareRootTrackingExceptions()
+            fpRegisters[Int(destinationRegister)] = value
+            try csrs.addFloatingPointExceptions(exceptions)
+        case .fsgnjd(let destinationRegister, let sourceRegister1, let sourceRegister2):
+            var value = fpRegisters[Int(sourceRegister1)]
+            value = Double(bitPattern: (value.bitPattern & 0x7fffffffffffffff) | (fpRegisters[Int(sourceRegister2)].bitPattern & 0x8000000000000000))
+            fpRegisters[Int(destinationRegister)] = value
+        case .fsgnjnd(let destinationRegister, let sourceRegister1, let sourceRegister2):
+            var value = fpRegisters[Int(sourceRegister1)]
+            if value.sign == fpRegisters[Int(sourceRegister2)].sign {
+                value = -value
+            }
+            fpRegisters[Int(destinationRegister)] = value
+        case .fsgnjxd(let destinationRegister, let sourceRegister1, let sourceRegister2):
+            var value = fpRegisters[Int(sourceRegister1)]
+            if value.sign == fpRegisters[Int(sourceRegister2)].sign {
+                value = abs(value)
+            } else {
+                value = -abs(value)
+            }
+            fpRegisters[Int(destinationRegister)] = value
+        case .fmind(let destinationRegister, let sourceRegister1, let sourceRegister2):
+            let firstOperand = fpRegisters[Int(sourceRegister1)]
+            let secondOperand = fpRegisters[Int(sourceRegister2)]
+            let value: Double = if firstOperand.isNaN && secondOperand.isNaN {
+                .nan
+            } else if firstOperand.isNaN {
+                secondOperand
+            } else if secondOperand.isNaN {
+                firstOperand
+            } else if (firstOperand.sign == .minus && firstOperand.isZero) && (secondOperand.sign == .plus && secondOperand.isZero) {
+                firstOperand
+            } else if (secondOperand.sign == .minus && secondOperand.isZero) && (firstOperand.sign == .plus && firstOperand.isZero) {
+                secondOperand
+            } else if secondOperand < firstOperand {
+                secondOperand
+            } else {
+                firstOperand
+            }
+            fpRegisters[Int(destinationRegister)] = value
+            if firstOperand.isSignalingNaN || secondOperand.isSignalingNaN {
+                try csrs.addFloatingPointExceptions([.invalid])
+            }
+        case .fmaxd(let destinationRegister, let sourceRegister1, let sourceRegister2):
+            let firstOperand = fpRegisters[Int(sourceRegister1)]
+            let secondOperand = fpRegisters[Int(sourceRegister2)]
+            let value: Double = if firstOperand.isNaN && secondOperand.isNaN {
+                .nan
+            } else if firstOperand.isNaN {
+                secondOperand
+            } else if secondOperand.isNaN {
+                firstOperand
+            } else if (firstOperand.sign == .minus && firstOperand.isZero) && (secondOperand.sign == .plus && secondOperand.isZero) {
+                secondOperand
+            } else if (secondOperand.sign == .minus && secondOperand.isZero) && (firstOperand.sign == .plus && firstOperand.isZero) {
+                firstOperand
+            } else if secondOperand > firstOperand {
+                secondOperand
+            } else {
+                firstOperand
+            }
+            fpRegisters[Int(destinationRegister)] = value
+            if firstOperand.isSignalingNaN || secondOperand.isSignalingNaN {
+                try csrs.addFloatingPointExceptions([.invalid])
+            }
+        case let .fcvtsd(destinationRegister, sourceRegister, _):
+            //TODO: rounding mode
+            let unconverted = fpRegisters[Int(sourceRegister)]
+            fpRegisters[Int(destinationRegister)] = if unconverted.isNaN { .nan } else { Double(nanBoxing: Float(unconverted)) }
+        case let .fcvtds(destinationRegister, sourceRegister, _):
+            //TODO: rounding mode
+            let unconverted = fpRegisters[Int(sourceRegister)].nanBoxedFloat
+            fpRegisters[Int(destinationRegister)] = if unconverted.isNaN { .nan } else { Double(unconverted) }
+        case let .fcvtwd(destinationRegister, sourceRegister, roundingMode):
+            let unconverted = fpRegisters[Int(sourceRegister)]
+            guard (!unconverted.isInfinite || unconverted.sign != .plus) && !unconverted.isNaN else {
+                registers[Int(destinationRegister)] = Int64(Int32.max)
+                try csrs.addFloatingPointExceptions([.invalid])
+                break
+            }
+            guard unconverted > Double(Int32.min) else {
+                registers[Int(destinationRegister)] = Int64(Int32.min)
+                try csrs.addFloatingPointExceptions([.invalid])
+                break
+            }
+            guard !unconverted.isInfinite || unconverted.sign != .minus else {
+                registers[Int(destinationRegister)] = Int64(Int32.min)
+                try csrs.addFloatingPointExceptions([.invalid])
+                break
+            }
+            guard unconverted < Double(Int32.max) else {
+                registers[Int(destinationRegister)] = Int64(Int32.max)
+                try csrs.addFloatingPointExceptions([.invalid])
+                break
+            }
+            let effectiveRoundingMode = if roundingMode == 7 { csrs.floatingPointRoundingMode } else { roundingMode }
+            let converted = switch effectiveRoundingMode {
+            case 0, 4:
+                unconverted.rounded()
+            case 1:
+                unconverted
+            case 2:
+                floor(unconverted)
+            case 3:
+                ceil(unconverted)
+            default:
+                fatalError("TODO: Exception for invalid rounding mode")
+            }
+            registers[Int(destinationRegister)] = Int64(Int32(converted))
+            if unconverted != Double(Int64(converted)) {
+                try csrs.addFloatingPointExceptions([.inexact])
+            }
+        case let .fcvtwud(destinationRegister, sourceRegister, roundingMode):
+            let unconverted = fpRegisters[Int(sourceRegister)]
+            guard (!unconverted.isInfinite || unconverted.sign != .plus) && !unconverted.isNaN else {
+                registers[Int(destinationRegister)] = Int64(UInt32.max.signExtension())
+                try csrs.addFloatingPointExceptions([.invalid])
+                break
+            }
+            guard unconverted > Double(UInt32.min) - 1 else {
+                registers[Int(destinationRegister)] = Int64(UInt32.min)
+                try csrs.addFloatingPointExceptions([.invalid])
+                break
+            }
+            guard !unconverted.isInfinite || unconverted.sign != .minus else {
+                registers[Int(destinationRegister)] = Int64(UInt32.min)
+                try csrs.addFloatingPointExceptions([.invalid])
+                break
+            }
+            guard unconverted <= Double(UInt32.max) else {
+                registers[Int(destinationRegister)] = Int64(UInt32.max.signExtension())
+                try csrs.addFloatingPointExceptions([.invalid])
+                break
+            }
+            let effectiveRoundingMode = if roundingMode == 7 { csrs.floatingPointRoundingMode } else { roundingMode }
+            var converted = switch effectiveRoundingMode {
+            case 0, 4:
+                unconverted.rounded()
+            case 1:
+                unconverted
+            case 2:
+                floor(unconverted)
+            case 3:
+                ceil(unconverted)
+            default:
+                fatalError("TODO: Exception for invalid rounding mode")
+            }
+            if converted < 0 {
+                converted = 0
+            }
+            registers[Int(destinationRegister)] = Int64(UInt32(converted).signExtension())
+            if unconverted != Double(UInt32(converted)) {
+                try csrs.addFloatingPointExceptions([.inexact])
+            }
+        case .feqd(let destinationRegister, let sourceRegister1, let sourceRegister2):
+            let firstOperand = fpRegisters[Int(sourceRegister1)]
+            let secondOperand = fpRegisters[Int(sourceRegister2)]
+            registers[Int(destinationRegister)] = if firstOperand == secondOperand { 1 } else { 0 }
+            if firstOperand.isSignalingNaN || secondOperand.isSignalingNaN {
+                try csrs.addFloatingPointExceptions([.invalid])
+            }
+        case .fltd(let destinationRegister, let sourceRegister1, let sourceRegister2):
+            let firstOperand = fpRegisters[Int(sourceRegister1)]
+            let secondOperand = fpRegisters[Int(sourceRegister2)]
+            let (result, exceptions) = firstOperand.lessThanTrackingExceptions(secondOperand)
+            registers[Int(destinationRegister)] = if result { 1 } else { 0 }
+            try csrs.addFloatingPointExceptions(exceptions)
+            // Invalid even if quiet NaNs
+            if firstOperand.isNaN || secondOperand.isNaN {
+                try csrs.addFloatingPointExceptions([.invalid])
+            }
+        case .fled(let destinationRegister, let sourceRegister1, let sourceRegister2):
+            let firstOperand = fpRegisters[Int(sourceRegister1)]
+            let secondOperand = fpRegisters[Int(sourceRegister2)]
+            registers[Int(destinationRegister)] = if firstOperand <= secondOperand { 1 } else { 0 }
+            // Invalid even if quiet NaNs
+            if firstOperand.isNaN || secondOperand.isNaN {
+                try csrs.addFloatingPointExceptions([.invalid])
+            }
+        case .fmvxd(let destinationRegister, let sourceRegister):
+            registers[Int(destinationRegister)] = fpRegisters[Int(sourceRegister)].bitPattern.signExtension()
+        case .fclassd(let destinationRegister, let sourceRegister):
+            registers[Int(destinationRegister)] = switch fpRegisters[Int(sourceRegister)].floatingPointClass {
+            case .negativeInfinity:
+                0x1
+            case .negativeNormal:
+                0x2
+            case .negativeSubnormal:
+                0x4
+            case .negativeZero:
+                0x8
+            case .positiveZero:
+                0x10
+            case .positiveSubnormal:
+                0x20
+            case .positiveNormal:
+                0x40
+            case .positiveInfinity:
+                0x80
+            case .signalingNaN:
+                0x100
+            case .quietNaN:
+                0x200
+            }
+        case .fmvdx(let destinationRegister, let sourceRegister):
+            let bitPattern = UInt64(bitPattern: registers[Int(sourceRegister)])
+            fpRegisters[Int(destinationRegister)] = Double(bitPattern: bitPattern)
+        case let .fcvtdw(destinationRegister, sourceRegister, _):
+            //TODO: Rounding mode
+            fpRegisters[Int(destinationRegister)] = Double(registers[Int(sourceRegister)])
+        case let .fcvtdwu(destinationRegister, sourceRegister, _):
+            //TODO: Rounding mode
+            let unconverted = UInt64(bitPattern: registers[Int(sourceRegister)]) & 0xffffffff
+            fpRegisters[Int(destinationRegister)] = Double(unconverted)
+        case let .fcvtld(destinationRegister, sourceRegister, roundingMode):
+            let unconverted = fpRegisters[Int(sourceRegister)]
+            guard (!unconverted.isInfinite || unconverted.sign != .plus) && !unconverted.isNaN else {
+                registers[Int(destinationRegister)] = Int64.max
+                try csrs.addFloatingPointExceptions([.invalid])
+                break
+            }
+            guard unconverted > Double(Int64.min) else {
+                registers[Int(destinationRegister)] = Int64.min
+                try csrs.addFloatingPointExceptions([.invalid])
+                break
+            }
+            guard !unconverted.isInfinite || unconverted.sign != .minus else {
+                registers[Int(destinationRegister)] = Int64.min
+                try csrs.addFloatingPointExceptions([.invalid])
+                break
+            }
+            guard unconverted < Double(Int64.max) else {
+                registers[Int(destinationRegister)] = Int64.max
+                try csrs.addFloatingPointExceptions([.invalid])
+                break
+            }
+            let effectiveRoundingMode = if roundingMode == 7 { csrs.floatingPointRoundingMode } else { roundingMode }
+            let converted = switch effectiveRoundingMode {
+            case 0, 4:
+                unconverted.rounded()
+            case 1:
+                unconverted
+            case 2:
+                floor(unconverted)
+            case 3:
+                ceil(unconverted)
+            default:
+                fatalError("TODO: Exception for invalid rounding mode")
+            }
+            registers[Int(destinationRegister)] = Int64(converted)
+            if unconverted != Double(Int64(converted)) {
+                try csrs.addFloatingPointExceptions([.inexact])
+            }
+        case let .fcvtlud(destinationRegister, sourceRegister, roundingMode):
+            let unconverted = fpRegisters[Int(sourceRegister)]
+            guard (!unconverted.isInfinite || unconverted.sign != .plus) && !unconverted.isNaN else {
+                registers[Int(destinationRegister)] = UInt64.max.signExtension()
+                try csrs.addFloatingPointExceptions([.invalid])
+                break
+            }
+            guard unconverted > Double(UInt64.min) - 1 else {
+                registers[Int(destinationRegister)] = Int64(bitPattern: UInt64.min)
+                try csrs.addFloatingPointExceptions([.invalid])
+                break
+            }
+            guard !unconverted.isInfinite || unconverted.sign != .minus else {
+                registers[Int(destinationRegister)] = Int64(bitPattern: UInt64.min)
+                try csrs.addFloatingPointExceptions([.invalid])
+                break
+            }
+            guard unconverted <= Double(UInt64.max) else {
+                registers[Int(destinationRegister)] = UInt64.max.signExtension()
+                try csrs.addFloatingPointExceptions([.invalid])
+                break
+            }
+            let effectiveRoundingMode = if roundingMode == 7 { csrs.floatingPointRoundingMode } else { roundingMode }
+            var converted = switch effectiveRoundingMode {
+            case 0, 4:
+                unconverted.rounded()
+            case 1:
+                unconverted
+            case 2:
+                floor(unconverted)
+            case 3:
+                ceil(unconverted)
+            default:
+                fatalError("TODO: Exception for invalid rounding mode")
+            }
+            if converted < 0 {
+                converted = 0
+            }
+            registers[Int(destinationRegister)] = UInt64(converted).signExtension()
+            if unconverted != Double(UInt64(converted)) {
+                try csrs.addFloatingPointExceptions([.inexact])
+            }
+        case let .fcvtdl(destinationRegister, sourceRegister, _):
+            //TODO: Rounding mode
+            let unconverted = registers[Int(sourceRegister)]
+            fpRegisters[Int(destinationRegister)] = Double(unconverted)
+        case let .fcvtdlu(destinationRegister, sourceRegister, _):
+            //TODO: Rounding mode
+            let unconverted = UInt64(bitPattern: registers[Int(sourceRegister)])
+            fpRegisters[Int(destinationRegister)] = Double(unconverted)
         case .ecall:
             if let ecallHandler {
                 ecallHandler.ecall(cpu: self)
